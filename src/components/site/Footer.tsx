@@ -1,6 +1,10 @@
 import { Mail, Phone, Linkedin, Twitter, Facebook, Youtube } from "lucide-react";
+import { useConference } from "@/context/ConferenceContext";
 
 export function Footer() {
+  const { getConferenceName, getConferenceEmail, conferenceData } = useConference();
+  const phone = (conferenceData?.Phone as string) || "+39 02 1234 5678";
+
   return (
     <footer className="bg-navy-deep text-slate-300">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 grid gap-8 md:grid-cols-3">
@@ -31,16 +35,16 @@ export function Footer() {
           <div className="text-white font-semibold mb-3">CONTACT US</div>
           <div className="text-sm space-y-2">
             <div className="flex items-center gap-2">
-              <Mail className="h-4 w-4 text-gold" /> info@wcmae2027.com
+              <Mail className="h-4 w-4 text-gold" /> {getConferenceEmail()}
             </div>
             <div className="flex items-center gap-2">
-              <Phone className="h-4 w-4 text-gold" /> +39 02 1234 5678
+              <Phone className="h-4 w-4 text-gold" /> {phone}
             </div>
           </div>
         </div>
       </div>
       <div className="border-t border-white/10 py-4 text-center text-xs text-slate-400">
-        © 2027 WCMAE. All rights reserved.
+        © 2027 {getConferenceName()}. All rights reserved.
       </div>
     </footer>
   );

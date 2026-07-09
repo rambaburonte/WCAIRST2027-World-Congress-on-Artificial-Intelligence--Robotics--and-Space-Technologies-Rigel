@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
   Users,
@@ -12,17 +14,10 @@ import {
   MapPin,
   Check,
   Mail,
-  Wrench,
-  Plane,
-  Thermometer,
-  Cpu,
-  Building2,
-  Bot,
-  Leaf,
-  Layers,
-  ShieldCheck,
-  Zap,
 } from "lucide-react";
+import { toast } from "sonner";
+import { useConference, DEFAULT_SHORT_NAME } from "@/context/ConferenceContext";
+import { subscribe, getErrorMessage } from "@/lib/api";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -32,6 +27,11 @@ const fadeUp = {
 };
 
 function Hero() {
+  const { conferenceData, getConferenceName } = useConference();
+  const name = getConferenceName();
+  const dates = conferenceData?.ConferenceDates || "May 12–14, 2027";
+  const venue = conferenceData?.ConferenceVenue || "Milan, Italy";
+
   return (
     <section className="relative overflow-hidden bg-navy text-white">
       <div
@@ -45,36 +45,52 @@ function Hero() {
       />
       <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/90 to-navy/40" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
-        <motion.p {...fadeUp} className="text-gold font-semibold tracking-widest text-sm">
+        <motion.p {...fadeUp} className="text-gold font-semibold tracking-widest text-sm uppercase">
           WORLD CONGRESS ON
         </motion.p>
         <motion.h1
           {...fadeUp}
           transition={{ duration: 0.5, delay: 0.05 }}
-          className="mt-3 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight max-w-3xl"
+          className="mt-3 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight max-w-3xl uppercase"
         >
-          MECHANICAL AND
-          <br />
-          AEROSPACE ENGINEERING
+          {name.includes("World Congress on") ? name.replace("World Congress on", "").trim() : name}
         </motion.h1>
-        <motion.p {...fadeUp} transition={{ duration: 0.5, delay: 0.1 }} className="mt-4 text-slate-200 max-w-2xl">
+        <motion.p
+          {...fadeUp}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mt-4 text-slate-200 max-w-2xl"
+        >
           Innovating Today for a Smarter, Safer and Sustainable Tomorrow
         </motion.p>
-        <motion.div {...fadeUp} transition={{ duration: 0.5, delay: 0.15 }} className="mt-6 flex flex-wrap items-center gap-6 text-sm">
+        <motion.div
+          {...fadeUp}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="mt-6 flex flex-wrap items-center gap-6 text-sm"
+        >
           <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-gold" /> May 12–14, 2027
+            <Calendar className="h-4 w-4 text-gold" /> {dates}
           </div>
           <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-gold" /> Milan, Italy
+            <MapPin className="h-4 w-4 text-gold" /> {venue}
           </div>
         </motion.div>
-        <motion.div {...fadeUp} transition={{ duration: 0.5, delay: 0.2 }} className="mt-8 flex flex-wrap gap-3">
-          <a href="#" className="rounded-md bg-gold px-6 py-3 font-bold text-navy hover:bg-gold-deep transition-colors">
+        <motion.div
+          {...fadeUp}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-8 flex flex-wrap gap-3"
+        >
+          <Link
+            to="/registration"
+            className="rounded-md bg-gold px-6 py-3 font-bold text-navy hover:bg-gold-deep transition-colors"
+          >
             REGISTER NOW
-          </a>
-          <a href="#" className="rounded-md border-2 border-white/70 px-6 py-3 font-bold hover:bg-white hover:text-navy transition-colors">
+          </Link>
+          <Link
+            to="/submission"
+            className="rounded-md border-2 border-white/70 px-6 py-3 font-bold hover:bg-white hover:text-navy transition-colors"
+          >
             SUBMIT ABSTRACT
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>
@@ -82,9 +98,10 @@ function Hero() {
 }
 
 function Statistics() {
+  const { speakers } = useConference();
   const stats = [
     { icon: Users, value: "500+", label: "Participants" },
-    { icon: Mic, value: "70+", label: "Expert Speakers" },
+    { icon: Mic, value: `${speakers.length || 70}+`, label: "Expert Speakers" },
     { icon: Globe, value: "40+", label: "Countries" },
     { icon: Handshake, value: "20+", label: "Sponsors & Exhibitors" },
   ];
@@ -106,11 +123,28 @@ function Statistics() {
 }
 
 function About() {
+  const { getConferenceName } = useConference();
   const features = [
-    { icon: Users2, title: "KNOWLEDGE EXCHANGE", text: "Discussion on emerging technologies, challenges and innovations" },
-    { icon: Network, title: "GLOBAL NETWORKING", text: "Connect with leading researchers, professionals and organizations" },
-    { icon: Cog, title: "TECHNOLOGY SHOWCASE", text: "Explore the latest technologies and industry solutions" },
-    { icon: Handshake, title: "COLLABORATION", text: "Build partnerships and collaborations for future research and projects" },
+    {
+      icon: Users2,
+      title: "KNOWLEDGE EXCHANGE",
+      text: "Discussion on emerging technologies, challenges and innovations",
+    },
+    {
+      icon: Network,
+      title: "GLOBAL NETWORKING",
+      text: "Connect with leading researchers, professionals and organizations",
+    },
+    {
+      icon: Cog,
+      title: "TECHNOLOGY SHOWCASE",
+      text: "Explore the latest technologies and industry solutions",
+    },
+    {
+      icon: Handshake,
+      title: "COLLABORATION",
+      text: "Build partnerships and collaborations for future research and projects",
+    },
   ];
   return (
     <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid lg:grid-cols-2 gap-12">
@@ -122,14 +156,16 @@ function About() {
           Shaping the Future.
         </h2>
         <p className="mt-5 text-slate-600 leading-relaxed">
-          The World Congress on Mechanical and Aerospace Engineering brings together
-          global experts, researchers, engineers, industry leaders and innovators to
-          exchange knowledge, discuss cutting-edge advancements, and explore future
-          trends in mechanical and aerospace engineering.
+          The {getConferenceName()} brings together global experts, researchers, engineers, industry
+          leaders and innovators to exchange knowledge, discuss cutting-edge advancements, and
+          explore future trends in mechanical and aerospace engineering.
         </p>
-        <button className="mt-6 rounded-md border-2 border-navy px-6 py-2 text-sm font-bold text-navy hover:bg-navy hover:text-white transition-colors">
+        <Link
+          to="/about"
+          className="mt-6 inline-flex rounded-md border-2 border-navy px-6 py-2 text-sm font-bold text-navy hover:bg-navy hover:text-white transition-colors"
+        >
           READ MORE
-        </button>
+        </Link>
       </motion.div>
       <div className="grid sm:grid-cols-2 gap-4">
         {features.map(({ icon: Icon, title, text }, i) => (
@@ -150,12 +186,13 @@ function About() {
 }
 
 function WhyAttend() {
+  const { getConferenceName } = useConference();
   const points = [
     "Learn from world-class experts and keynote speakers",
     "Present your research and gain global visibility",
     "Explore innovations in mechanical and aerospace industries",
     "Discover collaboration and funding opportunities",
-    "Enjoy Milan – a global hub of culture, design and innovation",
+    "Enjoy the vibrant atmosphere of the host city",
   ];
   return (
     <section className="bg-navy text-white">
@@ -168,7 +205,9 @@ function WhyAttend() {
           }}
         />
         <div className="px-6 sm:px-10 py-12 lg:py-16">
-          <h3 className="text-gold text-2xl font-bold">WHY ATTEND WCMAE 2027?</h3>
+          <h3 className="text-gold text-2xl font-bold uppercase">
+            WHY ATTEND {getConferenceName()}?
+          </h3>
           <ul className="mt-6 space-y-3">
             {points.map((p) => (
               <li key={p} className="flex gap-3 items-start text-sm">
@@ -184,6 +223,29 @@ function WhyAttend() {
 }
 
 function Newsletter() {
+  const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const { conferenceData } = useConference();
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setSubmitting(true);
+    try {
+      await subscribe({
+        email,
+        category: "newsletter",
+        user: conferenceData?.ShortName || DEFAULT_SHORT_NAME,
+      });
+      toast.success("Subscribed successfully!");
+      setEmail("");
+    } catch (err) {
+      toast.error(getErrorMessage(err));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <section className="bg-white border-b border-slate-100">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -196,14 +258,22 @@ function Newsletter() {
             </div>
           </div>
         </div>
-        <form className="flex w-full sm:w-auto gap-2">
+        <form onSubmit={handleSubscribe} className="flex w-full sm:w-auto gap-2">
           <input
             type="email"
             placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            disabled={submitting}
             className="flex-1 sm:w-64 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:border-navy"
           />
-          <button className="rounded-md bg-gold px-5 py-2 font-bold text-navy text-sm hover:bg-gold-deep transition-colors">
-            SUBSCRIBE
+          <button
+            type="submit"
+            disabled={submitting}
+            className="rounded-md bg-gold px-5 py-2 font-bold text-navy text-sm hover:bg-gold-deep transition-colors disabled:opacity-50"
+          >
+            {submitting ? "SUBSCRIBING..." : "SUBSCRIBE"}
           </button>
         </form>
       </div>
@@ -212,10 +282,39 @@ function Newsletter() {
 }
 
 function Sessions() {
+  const { conferenceData } = useConference();
+  const dates = conferenceData?.ConferenceDates || "May 12–14, 2027";
+
   const days = [
-    { day: "DAY 1", date: "May 12, 2027", items: ["Opening Ceremony", "Plenary & Keynote Lectures", "Technical Sessions", "Exhibition & Welcome Reception"] },
-    { day: "DAY 2", date: "May 13, 2027", items: ["Keynote Lectures", "Parallel Technical Sessions", "Workshops & Panel Discussions", "Networking Dinner"] },
-    { day: "DAY 3", date: "May 14, 2027", items: ["Keynote Lectures", "Technical Sessions", "Best Paper Awards", "Closing Ceremony"] },
+    {
+      day: "DAY 1",
+      date: dates.split("–")[0] || "May 12, 2027",
+      items: [
+        "Opening Ceremony",
+        "Plenary & Keynote Lectures",
+        "Technical Sessions",
+        "Exhibition & Welcome Reception",
+      ],
+    },
+    {
+      day: "DAY 2",
+      date: dates.replace(/.*–/, "")
+        ? dates.split(" ")[0] + " " + dates.replace(/.*–/, "").split(",")[0]
+        : "May 13, 2027",
+      items: [
+        "Keynote Lectures",
+        "Parallel Technical Sessions",
+        "Workshops & Panel Discussions",
+        "Networking Dinner",
+      ],
+    },
+    {
+      day: "DAY 3",
+      date: dates.replace(/.*–/, "")
+        ? dates.split(" ")[0] + " " + dates.replace(/.*–/, "").split(",")[0]
+        : "May 14, 2027",
+      items: ["Keynote Lectures", "Technical Sessions", "Best Paper Awards", "Closing Ceremony"],
+    },
   ];
   return (
     <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
@@ -224,12 +323,15 @@ function Sessions() {
           <h2 className="text-3xl sm:text-4xl font-bold text-navy">SESSIONS PROGRAM</h2>
           <div className="mt-2 h-1 w-16 bg-gold" />
           <p className="mt-4 text-slate-600">
-            Three days of inspiring keynotes, technical sessions, workshops, panel
-            discussions and networking opportunities.
+            Three days of inspiring keynotes, technical sessions, workshops, panel discussions and
+            networking opportunities.
           </p>
-          <button className="mt-6 rounded-md bg-navy px-6 py-2 text-sm font-bold text-white hover:bg-navy-deep transition-colors">
+          <Link
+            to="/program"
+            className="mt-6 inline-flex rounded-md bg-navy px-6 py-2 text-sm font-bold text-white hover:bg-navy-deep transition-colors"
+          >
             VIEW DETAILED PROGRAM
-          </button>
+          </Link>
         </div>
         <div
           className="h-56 lg:h-64 rounded-lg bg-cover bg-center shadow-lg"
@@ -263,18 +365,8 @@ function Sessions() {
 }
 
 function Tracks() {
-  const tracks = [
-    { icon: Wrench, label: "Advanced Manufacturing & Materials" },
-    { icon: Plane, label: "Aerospace Vehicles & Propulsion" },
-    { icon: Thermometer, label: "Thermal & Fluid Systems" },
-    { icon: Cpu, label: "Design, Simulation & Optimization" },
-    { icon: Building2, label: "Structures, Dynamics & Vibration" },
-    { icon: Bot, label: "Control, Automation & Mechatronics" },
-    { icon: Zap, label: "Emerging Technologies in Engineering" },
-    { icon: Leaf, label: "Sustainability & Green Engineering" },
-    { icon: Layers, label: "Additive Manufacturing" },
-    { icon: ShieldCheck, label: "Safety, Reliability & Maintenance" },
-  ];
+  const { tracks } = useConference();
+
   return (
     <section className="bg-slate-50 py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -283,19 +375,31 @@ function Tracks() {
             <h2 className="text-3xl sm:text-4xl font-bold text-navy">CONFERENCE TRACKS</h2>
             <div className="mt-2 h-1 w-16 bg-gold" />
           </div>
-          <button className="rounded-md border-2 border-navy px-5 py-2 text-xs font-bold text-navy hover:bg-navy hover:text-white transition-colors">
+          <Link
+            to="/submission"
+            className="rounded-md border-2 border-navy px-5 py-2 text-xs font-bold text-navy hover:bg-navy hover:text-white transition-colors"
+          >
             VIEW ALL TRACKS
-          </button>
+          </Link>
         </div>
         <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {tracks.map(({ icon: Icon, label }) => (
-            <div key={label} className="text-center group cursor-pointer">
-              <div className="mx-auto h-14 w-14 grid place-items-center rounded-full bg-white shadow group-hover:bg-navy transition-colors">
-                <Icon className="h-6 w-6 text-navy group-hover:text-gold transition-colors" />
+          {tracks.map((track) => {
+            const Icon = track.icon;
+            return (
+              <div key={track.id} className="text-center group cursor-pointer">
+                <div className="mx-auto h-14 w-14 grid place-items-center rounded-full bg-white shadow group-hover:bg-navy transition-colors">
+                  {typeof Icon === "string" ? (
+                    <span className="text-xl">{Icon}</span>
+                  ) : Icon ? (
+                    <Icon className="h-6 w-6 text-navy group-hover:text-gold transition-colors" />
+                  ) : (
+                    <span className="text-xl">➕</span>
+                  )}
+                </div>
+                <div className="mt-3 text-xs font-semibold text-slate-700">{track.name}</div>
               </div>
-              <div className="mt-3 text-xs font-semibold text-slate-700">{label}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -303,15 +407,35 @@ function Tracks() {
 }
 
 function Dates() {
+  const { conferenceData } = useConference();
+
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return "";
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+      return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    } catch {
+      return dateStr;
+    }
+  };
+
   const dates = [
     ["Abstract Submission Opens", "Oct 15, 2026"],
-    ["Abstract Submission Deadline", "Jan 15, 2027"],
+    [
+      "Abstract Submission Deadline",
+      formatDate(conferenceData?.abstract_submission_deadline) || "Jan 15, 2027",
+    ],
     ["Notification of Acceptance", "Feb 20, 2027"],
-    ["Early Bird Registration Deadline", "Mar 10, 2027"],
-    ["Regular Registration Deadline", "Apr 20, 2027"],
-    ["Final Paper Submission Deadline", "Apr 30, 2027"],
-    ["Conference Dates", "May 12–14, 2027"],
+    ["Early Bird Registration Deadline", formatDate(conferenceData?.EarlyBird) || "Mar 10, 2027"],
+    ["Regular Registration Deadline", formatDate(conferenceData?.mid_term) || "Apr 20, 2027"],
+    [
+      "Final Paper Submission Deadline",
+      formatDate(conferenceData?.registration_deadline) || "Apr 30, 2027",
+    ],
+    ["Conference Dates", conferenceData?.ConferenceDates || "May 12–14, 2027"],
   ];
+
   return (
     <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-20 grid lg:grid-cols-2 gap-10">
       <div>
@@ -338,8 +462,8 @@ function Dates() {
         <div className="absolute bottom-0 p-6 text-white">
           <div className="font-bold text-lg tracking-wide">MILAN, ITALY</div>
           <p className="mt-2 text-sm text-slate-200 max-w-md">
-            Experience the perfect blend of history, culture, fashion and
-            innovation in one of Europe's most vibrant cities.
+            Experience the perfect blend of history, culture, fashion and innovation in one of
+            Europe's most vibrant cities.
           </p>
           <button className="mt-4 rounded-md bg-gold px-5 py-2 text-xs font-bold text-navy hover:bg-gold-deep transition-colors">
             EXPLORE MILAN
@@ -371,13 +495,11 @@ export function PagePlaceholder({ title }: { title: string }) {
       <h1 className="text-4xl font-bold text-navy">{title}</h1>
       <div className="mt-2 h-1 w-16 bg-gold" />
       <p className="mt-6 text-slate-600 max-w-2xl">
-        This page is under construction. Content for {title.toLowerCase()} will be
-        published soon. In the meantime, explore the homepage for congress
-        highlights.
+        This page is under construction. Content for {title.toLowerCase()} will be published soon.
+        In the meantime, explore the homepage for congress highlights.
       </p>
     </section>
   );
 }
 
-// unused reexport safety
 export { Lightbulb };

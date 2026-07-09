@@ -1,14 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
-import { PagePlaceholder } from "@/components/site/Home";
+import { SubmissionPage } from "@/components/site/InnerPages";
 
 export const Route = createFileRoute("/submission")({
-  head: () => ({ meta: [{ title: "Submission — WCMAE 2027" }] }),
+  head: () => ({ meta: [{ title: "Abstract Submission — WCMAE 2027" }] }),
   component: () => (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1"><PagePlaceholder title="Submission" /></main>
+      <main className="flex-1">
+        <SubmissionPage />
+      </main>
       <Footer />
     </div>
   ),

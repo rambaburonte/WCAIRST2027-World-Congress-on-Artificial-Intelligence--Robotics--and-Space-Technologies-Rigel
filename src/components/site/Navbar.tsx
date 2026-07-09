@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, Plane } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useConference } from "@/context/ConferenceContext";
 
 const links = [
   { to: "/", label: "HOME" },
@@ -16,6 +17,12 @@ const links = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const { conferenceData } = useConference();
+  const shortName = conferenceData?.ShortName || "WCMAE-2027";
+  const nameParts = String(shortName).split("-");
+  const baseName = nameParts[0] || "WCMAE";
+  const yearName = nameParts[1] || "2027";
+
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
@@ -25,7 +32,7 @@ export function Navbar() {
           </div>
           <div className="leading-tight">
             <div className="font-bold text-navy tracking-tight">
-              WCMAE <span className="text-gold">2027</span>
+              {baseName} <span className="text-gold">{yearName}</span>
             </div>
             <div className="text-[9px] tracking-[0.2em] text-slate-500">
               INNOVATE · ENGINEER · ELEVATE

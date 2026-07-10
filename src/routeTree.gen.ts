@@ -15,6 +15,7 @@ import { Route as SpeakersRouteImport } from './routes/speakers'
 import { Route as RegistrationRouteImport } from './routes/registration'
 import { Route as ProgramRouteImport } from './routes/program'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CommitteeRouteImport } from './routes/committee'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -48,6 +49,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CommitteeRoute = CommitteeRouteImport.update({
+  id: '/committee',
+  path: '/committee',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -62,6 +68,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/committee': typeof CommitteeRoute
   '/contact': typeof ContactRoute
   '/program': typeof ProgramRoute
   '/registration': typeof RegistrationRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/committee': typeof CommitteeRoute
   '/contact': typeof ContactRoute
   '/program': typeof ProgramRoute
   '/registration': typeof RegistrationRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/committee': typeof CommitteeRoute
   '/contact': typeof ContactRoute
   '/program': typeof ProgramRoute
   '/registration': typeof RegistrationRoute
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/committee'
     | '/contact'
     | '/program'
     | '/registration'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/committee'
     | '/contact'
     | '/program'
     | '/registration'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/committee'
     | '/contact'
     | '/program'
     | '/registration'
@@ -126,6 +138,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  CommitteeRoute: typeof CommitteeRoute
   ContactRoute: typeof ContactRoute
   ProgramRoute: typeof ProgramRoute
   RegistrationRoute: typeof RegistrationRoute
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/committee': {
+      id: '/committee'
+      path: '/committee'
+      fullPath: '/committee'
+      preLoaderRoute: typeof CommitteeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -198,6 +218,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  CommitteeRoute: CommitteeRoute,
   ContactRoute: ContactRoute,
   ProgramRoute: ProgramRoute,
   RegistrationRoute: RegistrationRoute,

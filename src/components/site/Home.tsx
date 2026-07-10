@@ -18,6 +18,7 @@ import {
 import { toast } from "sonner";
 import { useConference, DEFAULT_SHORT_NAME } from "@/context/ConferenceContext";
 import { subscribe, getErrorMessage } from "@/lib/api";
+import { SpeakerCard } from "@/components/site/InnerPages";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -180,6 +181,76 @@ function About() {
             <p className="mt-2 text-xs text-slate-600 leading-relaxed">{text}</p>
           </motion.div>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function FeaturedSpeakers() {
+  const { speakers } = useConference();
+  const plenary = speakers.filter((speaker) => speaker.category === "Plenary");
+  const keynote = speakers.filter((speaker) => speaker.category === "Keynote");
+
+  const speakerCard = (speaker: typeof speakers[number], index: number) => (
+    <SpeakerCard speaker={speaker} index={index} />
+  );
+
+  return (
+    <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+      <div className="grid gap-10">
+        <div>
+          <p className="text-gold font-semibold tracking-widest text-xs">FEATURED SPEAKERS</p>
+          <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-navy">Plenary & Keynote Addresses</h2>
+          <p className="mt-4 max-w-3xl text-slate-600">
+            Meet the distinguished plenary and keynote speakers leading the conference with
+            visionary insights and technical expertise.
+          </p>
+        </div>
+
+        <div className="grid gap-12">
+          <div>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h3 className="text-2xl font-bold text-navy">Plenary Speakers</h3>
+                <p className="text-sm text-slate-500">
+                  Leading experts delivering the main thematic talks across mechanical and aerospace
+                  engineering.
+                </p>
+              </div>
+              <Link
+                to="/speakers"
+                className="inline-flex items-center rounded-md border border-navy px-4 py-2 text-sm font-semibold text-navy hover:bg-navy hover:text-white transition-colors"
+              >
+                View All Speakers
+              </Link>
+            </div>
+            <div className="mt-6 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+              {plenary.length > 0 ? (
+                plenary.slice(0, 3).map(speakerCard)
+              ) : (
+                <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center text-slate-500">
+                  Plenary speaker details are being loaded from the conference backend.
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-2xl font-bold text-navy">Keynote Speakers</h3>
+            <p className="mt-2 text-sm text-slate-500">
+              High-impact keynote sessions from global leaders shaping the future of engineering.
+            </p>
+            <div className="mt-6 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+              {keynote.length > 0 ? (
+                keynote.slice(0, 3).map(speakerCard)
+              ) : (
+                <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center text-slate-500">
+                  Keynote speaker details are being loaded from the conference backend.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -480,6 +551,7 @@ export function Home() {
       <Hero />
       <Statistics />
       <About />
+      <FeaturedSpeakers />
       <WhyAttend />
       <Newsletter />
       <Sessions />

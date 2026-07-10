@@ -433,7 +433,7 @@ export function ProgramPage() {
   );
 }
 
-function SpeakerCard({
+export function SpeakerCard({
   speaker,
   index = 0,
   onClick,

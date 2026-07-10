@@ -20,9 +20,9 @@ export const CONFERENCE = {
   location: "Milan, Italy",
   venue: "Milan Convention Centre",
   address: "Milan, Italy",
-  email: "info@wcmae2027.com",
+  email: "info@wcmae.com",
   phone: "+39 02 1234 5678",
-  website: "www.wcmae2027.com",
+  website: "www.wcmae.com",
 };
 
 export const NAV_LINKS = [

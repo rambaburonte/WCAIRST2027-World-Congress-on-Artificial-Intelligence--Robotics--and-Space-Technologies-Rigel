@@ -16,7 +16,7 @@ import {
   getVenueInfo,
 } from "@/lib/api";
 
-export const DEFAULT_SHORT_NAME = "WCMAE-2027";
+export const DEFAULT_SHORT_NAME = "WCMAE2027";
 
 type ConferenceData = {
   ConferenceTitle?: string;

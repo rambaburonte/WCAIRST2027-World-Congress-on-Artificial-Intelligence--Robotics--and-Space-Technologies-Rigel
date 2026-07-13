@@ -1029,8 +1029,8 @@ export function RegistrationPage() {
     ["listener", "Listener", "For attendees who want to listen to the scientific tracks."],
     ["student", "Student", "For full-time students with valid ID."],
     ["poster", "Poster", "For poster and visual presentation authors."],
-    ["virtual", "Virtual", "For online-only participation."],
-    ["discount", "Discount", "For a reduced or sponsored registration amount."],
+    // ["virtual", "Virtual", "For online-only participation."],
+    // ["discount", "Discount", "For a reduced or sponsored registration amount."],
   ] as const;
 
   const [form, setForm] = useState({
@@ -1053,11 +1053,14 @@ export function RegistrationPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const amount = getPricing(form.category);
+  const selectedCategory =
+    categories.find(([value]) => value === form.category)?.[1] || "Registration";
   const baseAmount = form.category === "discount" ? Number(form.amount || 0) : amount;
   const accommodationCost = includeAccommodation ? accommodationNights * 175 : 0;
   const subtotal = baseAmount + accommodationCost;
   const tax = subtotal * 0.05;
   const totalAmount = Math.round((subtotal + tax) * 100) / 100;
+  const selectedAmount = form.category === "discount" ? baseAmount : amount;
 
   const formatCurrency = (val: number) => (Math.round(val * 100) / 100).toFixed(2);
 
@@ -1070,6 +1073,412 @@ export function RegistrationPage() {
         toast.error("Please enter a valid discount amount.");
         return;
       }
+    }
+
+    setSubmitting(true);
+    try {
+      const descriptionParts = [
+        `${getConferenceName()} ${form.category} registration: €${formatCurrency(baseAmount)}`,
+      ];
+      if (includeAccommodation) {
+        descriptionParts.push(
+          `Accommodation: €175 x ${accommodationNights} nights = €${formatCurrency(accommodationCost)}`,
+        );
+      }
+      descriptionParts.push(`Tax (5%): €${formatCurrency(tax)}`);
+
+      const payload = {
+        title: form.title,
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        org: form.organization,
+        country: form.country,
+        category: form.category,
+        conf: conferenceData?.ShortName || DEFAULT_SHORT_NAME,
+        user: DEFAULT_SHORT_NAME,
+        amount: totalAmount,
+        currency: "EUR",
+        description: descriptionParts.join(", "),
+        includeAccommodation,
+        accommodationNights,
+        accommodationCost,
+        paymentProvider: form.paymentProvider,
+        successUrl: `${window.location.origin}/payment-success`,
+        cancelUrl: `${window.location.origin}/payment-cancel`,
+      };
+
+      const response =
+        form.paymentProvider === "paypal"
+          ? await createPaypalPayment(payload)
+          : await createStripePaymentIntent(payload);
+
+      const redirectUrl = String(
+        response.approvalUrl || response.url || response.checkoutUrl || "",
+      );
+      toast.success("Registration created. Continue to payment.");
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+      } else {
+        toast.error("Payment redirect URL could not be retrieved.");
+      }
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <PageShell
+      eyebrow="Registration"
+      title="Conference registration for delegates, presenters and students"
+      lead="Use this page to capture the essential delegate details, select a category and complete the payment securely."
+      primary={{ label: "Proceed to contact", to: "/contact" }}
+      secondary={{ label: "View venue", to: "/venue" }}
+    >
+      <div className="grid gap-10 lg:grid-cols-12 items-start">
+        <div className="lg:col-span-4 space-y-5">
+          <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+              {getPricingTierLabel()} Rate Level
+            </p>
+            <div className="mt-5 space-y-3">
+              {categories.map(([value, title, text]) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setForm((prev) => ({ ...prev, category: value }))}
+                  className={`w-full rounded-2xl border px-4 py-3 text-left transition ${
+                    form.category === value
+                      ? "border-navy bg-navy/5 text-navy font-semibold"
+                      : "border-slate-200 bg-white text-slate-700 hover:border-navy/40"
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="font-semibold">{title}</span>
+                    <span className="text-xs font-bold text-navy">€{getPricing(value)}</span>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-500 leading-relaxed">{text}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl bg-navy p-7 text-white shadow-xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+              Delegate benefits
+            </p>
+            <h3 className="mt-3 text-2xl font-bold">What registration includes</h3>
+            <div className="mt-6 space-y-3">
+              <div className="flex gap-3 text-sm">
+                <Check className="mt-0.5 h-5 w-5 text-gold" /> Access to plenary, oral and poster
+                sessions
+              </div>
+              <div className="flex gap-3 text-sm">
+                <Check className="mt-0.5 h-5 w-5 text-gold" /> Conference kit, badge and
+                refreshments
+              </div>
+              <div className="flex gap-3 text-sm">
+                <Check className="mt-0.5 h-5 w-5 text-gold" /> Networking breaks and welcome
+                interaction
+              </div>
+              <div className="flex gap-3 text-sm">
+                <Check className="mt-0.5 h-5 w-5 text-gold" /> Certificate of attendance after the
+                event
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form
+          onSubmit={handleSubmit}
+          className="lg:col-span-8 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm"
+        >
+          <div className="mb-6 rounded-2xl border border-navy/20 bg-navy/5 p-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-navy/80">
+                  Selected registration
+                </p>
+                <p className="text-base font-semibold text-navy">{selectedCategory}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                  Amount
+                </p>
+                <p className="text-lg font-bold text-navy">€{formatCurrency(selectedAmount)}</p>
+              </div>
+            </div>
+            {form.category === "discount" && (
+              <p className="mt-2 text-sm text-slate-600">
+                Enter the discounted amount you want to charge below.
+              </p>
+            )}
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Field
+              label="Title"
+              value={form.title}
+              onChange={(title) => setForm((prev) => ({ ...prev, title }))}
+              placeholder="Dr / Prof / Ms"
+            />
+            <Field
+              label="Full name"
+              required
+              value={form.name}
+              onChange={(name) => setForm((prev) => ({ ...prev, name }))}
+              placeholder="Jane Doe"
+            />
+            <Field
+              label="Email"
+              type="email"
+              required
+              value={form.email}
+              onChange={(email) => setForm((prev) => ({ ...prev, email }))}
+              placeholder="you@example.com"
+            />
+            <Field
+              label="Phone"
+              required
+              value={form.phone}
+              onChange={(phone) => setForm((prev) => ({ ...prev, phone }))}
+              placeholder="+1 555 0100"
+            />
+            <Field
+              label="Organization"
+              required
+              value={form.organization}
+              onChange={(organization) => setForm((prev) => ({ ...prev, organization }))}
+              placeholder="Institution / Hospital / Company"
+            />
+            <Field
+              label="Country"
+              required
+              value={form.country}
+              onChange={(country) => setForm((prev) => ({ ...prev, country }))}
+              placeholder="Country"
+            />
+          </div>
+
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
+            <SelectField
+              label="Registration type"
+              value={form.category}
+              onChange={(category) => setForm((prev) => ({ ...prev, category }))}
+              options={[
+                ["speaker", "Speaker"],
+                ["delegate", "Delegate"],
+                ["listener", "Listener"],
+                ["student", "Student"],
+                ["poster", "Poster"],
+                // ["virtual", "Virtual"],
+                // ["discount", "Discount"],
+              ]}
+            />
+            <SelectField
+              label="Attendance mode"
+              value={form.attendance}
+              onChange={(attendance) => setForm((prev) => ({ ...prev, attendance }))}
+              options={[
+                ["onsite", "On-site"],
+                ["virtual", "Virtual"],
+              ]}
+            />
+          </div>
+
+          {form.category === "discount" && (
+            <div className="mt-8">
+              <Field
+                label="Discount amount (EUR)"
+                type="number"
+                required
+                value={form.amount}
+                onChange={(amount) => setForm((prev) => ({ ...prev, amount }))}
+                placeholder="250"
+              />
+              <p className="mt-2 text-xs text-slate-500">
+                Enter the discounted registration amount in EUR. Tax and accommodation are computed
+                automatically.
+              </p>
+            </div>
+          )}
+
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
+            <Field
+              label="Abstract / paper title"
+              value={form.abstractTitle}
+              onChange={(abstractTitle) => setForm((prev) => ({ ...prev, abstractTitle }))}
+              placeholder="Optional if already available"
+            />
+          </div>
+
+          <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <label className="flex items-center gap-3 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={includeAccommodation}
+                onChange={(event) => setIncludeAccommodation(event.target.checked)}
+                className="h-4 w-4 rounded border-slate-300 text-navy focus:ring-navy"
+              />
+              Add accommodation (€175/night)
+            </label>
+
+            {includeAccommodation && (
+              <div className="mt-4 flex items-center gap-3">
+                <label
+                  htmlFor="accommodation-nights"
+                  className="text-sm text-slate-500 font-medium"
+                >
+                  Nights
+                </label>
+                <select
+                  id="accommodation-nights"
+                  value={accommodationNights}
+                  onChange={(event) => setAccommodationNights(Number(event.target.value))}
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm focus:border-navy focus:outline-none"
+                >
+                  {[1, 2, 3, 4, 5, 6, 7].map((night) => (
+                    <option key={night} value={night}>
+                      {night} {night === 1 ? "night" : "nights"}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm">
+            <div className="flex items-center justify-between text-slate-500">
+              <span>Base registration</span>
+              <span>€{formatCurrency(baseAmount)}</span>
+            </div>
+            {includeAccommodation && (
+              <div className="mt-2 flex items-center justify-between text-slate-500">
+                <span>
+                  Accommodation ({accommodationNights}{" "}
+                  {accommodationNights === 1 ? "night" : "nights"})
+                </span>
+                <span>€{formatCurrency(accommodationCost)}</span>
+              </div>
+            )}
+            <div className="mt-2 flex items-center justify-between text-slate-500">
+              <span>Subtotal</span>
+              <span>€{formatCurrency(subtotal)}</span>
+            </div>
+            <div className="mt-2 flex items-center justify-between text-slate-500">
+              <span>Tax (5%)</span>
+              <span>€{formatCurrency(tax)}</span>
+            </div>
+            <div className="mt-3 border-t border-slate-200 pt-3 font-semibold text-navy flex items-center justify-between text-base">
+              <span>Total</span>
+              <span>€{formatCurrency(totalAmount)}</span>
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+              Payment Provider
+            </p>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {["stripe",].map((provider) => (
+                <button
+                  key={provider}
+                  type="button"
+                  onClick={() => setForm((prev) => ({ ...prev, paymentProvider: provider }))}
+                  className={`flex items-center gap-3 rounded-2xl border px-4 py-4 text-left capitalize transition ${
+                    form.paymentProvider === provider
+                      ? "border-navy bg-navy/5 text-navy font-semibold"
+                      : "border-slate-200 bg-white"
+                  }`}
+                >
+                  <Ticket size={18} />
+                  {provider}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+              Additional notes
+            </p>
+            <label className="mt-4 grid gap-2 text-sm font-medium text-slate-700">
+              Notes
+              <textarea
+                value={form.notes}
+                onChange={(event) => setForm((prev) => ({ ...prev, notes: event.target.value }))}
+                rows={5}
+                placeholder="Share any dietary needs, presentation notes, or registration questions"
+                className="rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-navy bg-white"
+              />
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl bg-gold px-6 py-3 text-sm font-bold text-navy transition-colors hover:bg-gold-deep disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {submitting ? "Processing Payment..." : "Submit & Continue to Payment"}{" "}
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </form>
+      </div>
+    </PageShell>
+  );
+}
+
+
+
+
+function DiscountRegistrationPageLegacy() {
+  const { conferenceData, getConferenceName, getPricing, getPricingTierLabel } = useConference();
+
+  const categories = [
+    ["speaker", "Speaker", "For keynote, invited and oral presenters."],
+    ["delegate", "Delegate", "For general conference attendees."],
+    ["listener", "Listener", "For attendees who want to listen to the scientific tracks."],
+    ["poster", "Poster", "For poster and visual presentation authors."],
+    ["student", "Student", "For full-time students with valid ID."],
+    ["virtual", "Virtual", "For online-only participation."],
+  ] as const;
+
+  const [form, setForm] = useState({
+    title: "",
+    name: "",
+    email: "",
+    phone: "",
+    organization: "",
+    country: "",
+    category: "delegate",
+    attendance: "onsite",
+    abstractTitle: "",
+    notes: "",
+    amount: String(getPricing("delegate")),
+    paymentProvider: "stripe",
+  });
+
+  const [includeAccommodation, setIncludeAccommodation] = useState(false);
+  const [accommodationNights, setAccommodationNights] = useState(3);
+  const [submitting, setSubmitting] = useState(false);
+
+  const baseAmount = Number(form.amount || 0);
+  const accommodationCost = includeAccommodation ? accommodationNights * 175 : 0;
+  const subtotal = baseAmount + accommodationCost;
+  const tax = baseAmount * 0.05;
+  const totalAmount = Math.round((baseAmount + tax) * 100) / 100;
+
+  const formatCurrency = (val: number) => (Math.round(val * 100) / 100).toFixed(2);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const parsedAmount = Number(form.amount);
+    if (!form.amount || Number.isNaN(parsedAmount) || parsedAmount <= 0) {
+      toast.error("Please enter a valid discount amount.");
+      return;
     }
 
     setSubmitting(true);
@@ -1248,8 +1657,8 @@ export function RegistrationPage() {
                 ["listener", "Listener"],
                 ["student", "Student"],
                 ["poster", "Poster"],
-                ["virtual", "Virtual"],
-                ["discount", "Discount"],
+                // ["virtual", "Virtual"],
+                // ["discount", "Discount"],
               ]}
             />
             <SelectField
@@ -1357,7 +1766,7 @@ export function RegistrationPage() {
               Payment Provider
             </p>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              {["stripe", "paypal"].map((provider) => (
+              {["stripe",].map((provider) => (
                 <button
                   key={provider}
                   type="button"
@@ -1397,6 +1806,248 @@ export function RegistrationPage() {
             className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl bg-gold px-6 py-3 text-sm font-bold text-navy transition-colors hover:bg-gold-deep disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? "Processing Payment..." : "Submit & Continue to Payment"}{" "}
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </form>
+      </div>
+    </PageShell>
+  );
+}
+
+export function DiscountRegistrationPage() {
+  const { conferenceData, getConferenceName, getPricing, getPricingTierLabel } = useConference();
+
+  const categories = [
+    ["speaker", "Speaker"],
+    ["delegate", "Delegate"],
+    ["listener", "Listener"],
+    ["poster", "Poster"],
+    ["student", "Student"],
+    ["virtual", "Virtual"],
+  ] as const;
+
+  const [form, setForm] = useState({
+    title: "",
+    name: "",
+    email: "",
+    phone: "",
+    organization: "",
+    country: "",
+    category: "delegate",
+    amount: String(getPricing("delegate")),
+    paymentProvider: "stripe",
+  });
+  const [submitting, setSubmitting] = useState(false);
+
+  const baseAmount = Number(form.amount || 0);
+  const tax = baseAmount * 0.05;
+  const totalAmount = Math.round((baseAmount + tax) * 100) / 100;
+  const formatCurrency = (value: number) => (Math.round(value * 100) / 100).toFixed(2);
+
+  const handleCategoryChange = (category: string) => {
+    setForm((prev) => ({
+      ...prev,
+      category,
+      amount: String(getPricing(category)),
+    }));
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const parsedAmount = Number(form.amount);
+    if (!form.amount || Number.isNaN(parsedAmount) || parsedAmount <= 0) {
+      toast.error("Please enter a valid discount amount.");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const payload = {
+        title: form.title,
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        org: form.organization,
+        country: form.country,
+        category: form.category,
+        conf: conferenceData?.ShortName || DEFAULT_SHORT_NAME,
+        user: DEFAULT_SHORT_NAME,
+        amount: totalAmount,
+        currency: "EUR",
+        description: `${getConferenceName()} ${form.category} registration: EUR ${formatCurrency(
+          baseAmount,
+        )}, Tax (5%): EUR ${formatCurrency(tax)}`,
+        paymentProvider: form.paymentProvider,
+        successUrl: `${window.location.origin}/payment-success`,
+        cancelUrl: `${window.location.origin}/payment-cancel`,
+      };
+
+      const response =
+        form.paymentProvider === "paypal"
+          ? await createPaypalPayment(payload)
+          : await createStripePaymentIntent(payload);
+
+      const redirectUrl = String(
+        response.approvalUrl || response.url || response.checkoutUrl || "",
+      );
+      toast.success("Registration created. Continue to payment.");
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+      } else {
+        toast.error("Payment redirect URL could not be retrieved.");
+      }
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <PageShell
+      eyebrow="Registration"
+      title="Conference registration for delegates, presenters and students"
+      lead="Use this page to capture the essential delegate details, select a category and complete the payment securely."
+      primary={{ label: "Proceed to contact", to: "/contact" }}
+      secondary={{ label: "View venue", to: "/venue" }}
+    >
+      <div className="grid gap-10 lg:grid-cols-12 items-start">
+        <div className="lg:col-span-4">
+          <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+              {getPricingTierLabel()} Rate
+            </p>
+            <p className="mt-3 text-sm leading-6 text-slate-500">
+              Rate updates automatically from the conference deadline data when available.
+            </p>
+            <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm">
+              <div className="flex items-center justify-between text-slate-600">
+                <span>Base Amount</span>
+                <span>{"€"}{formatCurrency(baseAmount)}</span>
+              </div>
+              <div className="mt-2 flex items-center justify-between text-slate-600">
+                <span>Tax (5%)</span>
+                <span>{"€"}{formatCurrency(tax)}</span>
+              </div>
+              <div className="mt-3 border-t border-slate-200 pt-3 font-semibold text-navy flex items-center justify-between text-base">
+                <span>Total</span>
+                <span>{"€"}{formatCurrency(totalAmount)}</span>
+              </div>
+            </div>
+            <div className="mt-6 space-y-3 text-sm">
+              {categories.map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => handleCategoryChange(value)}
+                  className={`flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${
+                    form.category === value
+                      ? "border-navy bg-navy/5 text-navy font-semibold"
+                      : "border-slate-200 bg-white text-slate-700 hover:border-navy/40"
+                  }`}
+                >
+                  <span>{label}</span>
+                  <span className="font-semibold">{"€"}{getPricing(value)}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <form
+          onSubmit={handleSubmit}
+          className="lg:col-span-8 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm"
+        >
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Field
+              label="Title"
+              value={form.title}
+              onChange={(title) => setForm((prev) => ({ ...prev, title }))}
+              placeholder="Dr / Prof / Ms"
+            />
+            <Field
+              label="Full name"
+              required
+              value={form.name}
+              onChange={(name) => setForm((prev) => ({ ...prev, name }))}
+              placeholder="Jane Doe"
+            />
+            <Field
+              label="Email"
+              type="email"
+              required
+              value={form.email}
+              onChange={(email) => setForm((prev) => ({ ...prev, email }))}
+              placeholder="you@example.com"
+            />
+            <Field
+              label="Phone"
+              required
+              value={form.phone}
+              onChange={(phone) => setForm((prev) => ({ ...prev, phone }))}
+              placeholder="+1 555 0100"
+            />
+            <Field
+              label="Organization"
+              required
+              value={form.organization}
+              onChange={(organization) => setForm((prev) => ({ ...prev, organization }))}
+              placeholder="Institution / Hospital / Company"
+            />
+            <Field
+              label="Country"
+              required
+              value={form.country}
+              onChange={(country) => setForm((prev) => ({ ...prev, country }))}
+              placeholder="Country"
+            />
+          </div>
+
+          <div className="mt-8">
+            <Field
+              label="Discount amount (EUR)"
+              type="number"
+              required
+              value={form.amount}
+              onChange={(amount) => setForm((prev) => ({ ...prev, amount }))}
+              placeholder="749"
+            />
+            <p className="mt-2 text-xs text-slate-500">
+              Enter the discounted amount in EUR that should be charged for this registration and
+              5% tax will be added automatically.
+            </p>
+          </div>
+
+          <div className="mt-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+              Payment Provider
+            </p>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {["stripe"].map((provider) => (
+                <button
+                  key={provider}
+                  type="button"
+                  onClick={() => setForm((prev) => ({ ...prev, paymentProvider: provider }))}
+                  className={`flex items-center gap-3 rounded-2xl border px-4 py-4 text-left capitalize transition ${
+                    form.paymentProvider === provider
+                      ? "border-navy bg-navy/5 text-navy font-semibold"
+                      : "border-slate-200 bg-white"
+                  }`}
+                >
+                  <Ticket size={18} />
+                  {provider}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl bg-gold px-6 py-3 text-sm font-bold text-navy transition-colors hover:bg-gold-deep disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {submitting ? "Creating Payment..." : "Continue to Payment"}{" "}
             <ArrowRight className="h-4 w-4" />
           </button>
         </form>

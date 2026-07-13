@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { useConference, DEFAULT_SHORT_NAME } from "@/context/ConferenceContext";
 import { subscribe, getErrorMessage } from "@/lib/api";
 import { SpeakerCard } from "@/components/site/InnerPages";
+import hero from "/hero.jpg";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -39,12 +40,12 @@ function Hero() {
         className="absolute inset-0 opacity-40"
         style={{
           backgroundImage:
-            "url(https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1920&q=80)",
+            `url(${hero})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/90 to-navy/40" />
+      <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/40 to-navy/10" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
         <motion.p {...fadeUp} className="text-gold font-semibold tracking-widest text-sm uppercase">
           WORLD CONGRESS ON

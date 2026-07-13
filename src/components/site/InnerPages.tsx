@@ -623,7 +623,7 @@ export function SubmissionPage() {
   const [statusResult, setStatusResult] = useState<Record<string, unknown> | null>(null);
   const [checking, setChecking] = useState(false);
 
-  const shortName = conferenceData?.ShortName || "WCMAE-2027";
+  const shortName = conferenceData?.ShortName || DEFAULT_SHORT_NAME;
   const tracks =
     contextTracks.length > 0
       ? contextTracks.map((t) => t.name)
@@ -662,29 +662,54 @@ export function SubmissionPage() {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+
+    if (!form.file) {
+      toast.error("Please upload an abstract file before submitting.");
+      return;
+    }
+
     setSubmitting(true);
     try {
       const fd = new FormData();
-      fd.append("user", shortName);
-      fd.append("fname", form.name);
-      fd.append("title", form.title);
-      fd.append("email", form.email);
-      fd.append("cemail", form.email);
-      fd.append("country", form.country);
-      fd.append("org", form.organization);
-      fd.append("phno", form.phone);
-      fd.append("category", form.category);
-      fd.append("trackName", form.trackName);
-      fd.append("presentationTitle", form.presentationTitle);
-      fd.append("address", form.address);
+      const conferenceShortName = String(shortName || DEFAULT_SHORT_NAME)
+        .replace(/[-_ ]/g, "")
+        .trim()
+        .toUpperCase() || DEFAULT_SHORT_NAME;
+      const fullName = form.name.trim();
+      const abstractText = form.abstractText.trim();
+      const title = form.title.trim();
+      const email = form.email.trim();
+      const country = form.country.trim();
+      const organization = form.organization.trim();
+      const phone = form.phone.trim();
+      const category = form.category.trim();
+      const trackName = form.trackName.trim();
+      const presentationTitle = form.presentationTitle.trim();
+      const address = form.address.trim();
+
+      fd.append("user", conferenceShortName);
+      fd.append("fname", fullName);
+      fd.append("title", title);
+      fd.append("email", email);
+      fd.append("cemail", email);
+      fd.append("country", country);
+      fd.append("org", organization);
+      fd.append("phno", phone);
+      fd.append("category", category);
+      fd.append("trackName", trackName);
+      fd.append("presentationTitle", presentationTitle);
+      fd.append("address", address);
       fd.append("entity", "conference");
-      fd.append("abstract", form.abstractText);
+      fd.append("abstract", abstractText);
+      fd.append("abstractText", abstractText);
+      fd.append("conference", conferenceShortName);
+      fd.append("conf", conferenceShortName);
       if (form.file) {
-        fd.append("file", form.file);
+        fd.append("file", form.file, form.file.name);
       }
 
       const response = await submitAbstract(fd);
-      const id = response.submissionId || response.referenceId || response.id;
+      const id = response.submissionId || response.referenceId || response.id || response.message;
       toast.success(
         id
           ? `Abstract submitted successfully. Reference ID: ${id}`
@@ -707,7 +732,9 @@ export function SubmissionPage() {
         file: null,
       });
     } catch (error) {
-      toast.error(getErrorMessage(error));
+      const message = getErrorMessage(error);
+      console.error("Abstract submission failed", error);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
@@ -930,6 +957,7 @@ export function SubmissionPage() {
                   type="file"
                   className="sr-only"
                   accept=".pdf,.doc,.docx"
+                  required
                   onChange={handleFileChange}
                 />
               </label>

@@ -1,5 +1,7 @@
-const BACKEND_URL = "https://api.ccai2026.com";
-const API_BASE = `${BACKEND_URL}/api`;
+// Allow overriding the backend URL via Vite env variable `VITE_API_BASE`.
+// Example in development: VITE_API_BASE=http://localhost:3000
+const BACKEND_URL = (import.meta.env && import.meta.env.VITE_API_BASE) || "https://api.ccai2026.com";
+const API_BASE = `${BACKEND_URL.replace(/\/$/, "")}/api`;
 
 const CACHE_DURATION = 5 * 60 * 1000;
 const apiCache = new Map<string, { data: unknown; timestamp: number }>();
@@ -8,7 +10,14 @@ type ApiOptions = RequestInit & { isFormData?: boolean };
 
 async function apiRequest<T>(path: string, options: ApiOptions = {}): Promise<T> {
   const { isFormData, headers, ...requestOptions } = options;
-  const response = await fetch(`${API_BASE}${path}`, {
+  const url = `${API_BASE}${path}`;
+  if (import.meta.env && import.meta.env.DEV) {
+    // Helpful debug logging in dev when debugging API issues
+    // eslint-disable-next-line no-console
+    console.debug("API request:", { url, options: requestOptions, isFormData, headers });
+  }
+
+  const response = await fetch(url, {
     ...requestOptions,
     headers: isFormData
       ? (headers as HeadersInit)
@@ -19,14 +28,29 @@ async function apiRequest<T>(path: string, options: ApiOptions = {}): Promise<T>
   });
 
   const text = await response.text();
-  const data = text ? JSON.parse(text) : null;
-
-  if (!response.ok) {
-    const message = data?.message || data?.error || response.statusText || "API request failed";
-    throw Object.assign(new Error(message), { response: { status: response.status, data } });
+  let data: Record<string, unknown> | string | null = null;
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = text;
+    }
   }
 
-  return data as T;
+  if (!response.ok) {
+    const message =
+      (typeof data === "object" && data && (data.message || data.error)) ||
+      response.statusText ||
+      "API request failed";
+    throw Object.assign(new Error(String(message)), { response: { status: response.status, data } });
+  }
+
+  if (import.meta.env && import.meta.env.DEV) {
+    // eslint-disable-next-line no-console
+    console.debug("API response:", { url, status: response.status, data });
+  }
+
+  return (data as T) ?? ({} as T);
 }
 
 async function cached<T>(key: string, fetcher: () => Promise<T>): Promise<T> {

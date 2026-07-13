@@ -17,12 +17,17 @@ const links = [
 ] as const;
 
 export function Navbar() {
-  const [open, setOpen] = useState(false);
+const [open, setOpen] = useState(false);
   const { conferenceData } = useConference();
-  const shortName = conferenceData?.ShortName || "WCMAE-2027";
-  const nameParts = String(shortName).split("-");
-  const baseName = nameParts[0] || "WCMAE";
-  const yearName = nameParts[1] || "2027";
+  
+  const shortName = conferenceData?.ShortName || "WCMAE2027";
+  
+  // 1. Find any 4-digit number in the string to use as the year
+  const yearMatch = String(shortName).match(/\d{4}/);
+  const yearName = yearMatch ? yearMatch[0] : "2027";
+  
+  // 2. Remove the year (and any optional hyphen/space before it) to get the base name
+  const baseName = String(shortName).replace(/[-\s]?\d{4}/, "").trim() || "WCMAE";
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">

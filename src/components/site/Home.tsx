@@ -524,7 +524,7 @@ function Dates() {
       </div>
       <div className="relative rounded-xl overflow-hidden min-h-[400px] shadow-xl">
         <img
-          src="https://images.unsplash.com/photo-1520440229-6469a149ac07?w=1200&q=80"
+          src="https://images.unsplash.com/photo-1529260830199-42c24126f198?w=1200&q=80"
           alt="Milan cathedral"
           className="absolute inset-0 h-full w-full object-cover"
           loading="lazy"

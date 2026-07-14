@@ -353,14 +353,46 @@ function Newsletter() {
   );
 }
 
+
+
+
+
+
+
+const getConferenceDays = (conferenceDates?: string) => {
+  if (!conferenceDates) {
+    return ["May 12, 2027", "May 13, 2027", "May 14, 2027"];
+  }
+
+  // Example: "May 12–14, 2027"
+  const match = conferenceDates.match(
+    /^([A-Za-z]+)\s+(\d+)[–-](\d+),\s*(\d{4})$/
+  );
+
+  if (!match) {
+    return [conferenceDates];
+  }
+
+  const [, month, startDay, endDay, year] = match;
+
+  const days = [];
+
+  for (let day = Number(startDay); day <= Number(endDay); day++) {
+    days.push(`${month} ${day}, ${year}`);
+  }
+
+  return days;
+};
+
 function Sessions() {
   const { conferenceData } = useConference();
-  const dates = conferenceData?.ConferenceDates || "May 12–14, 2027";
+  // const dates = conferenceData?.ConferenceDates || "May 12–14, 2027";
+  const conferenceDays = getConferenceDays(conferenceData?.ConferenceDates);
 
   const days = [
     {
       day: "DAY 1",
-      date: dates.split("–")[0] || "May 12, 2027",
+      date: conferenceDays[0],
       items: [
         "Opening Ceremony",
         "Plenary & Keynote Lectures",
@@ -370,9 +402,7 @@ function Sessions() {
     },
     {
       day: "DAY 2",
-      date: dates.replace(/.*–/, "")
-        ? dates.split(" ")[0] + " " + dates.replace(/.*–/, "").split(",")[0]
-        : "May 13, 2027",
+      date: conferenceDays[1],
       items: [
         "Keynote Lectures",
         "Parallel Technical Sessions",
@@ -382,9 +412,7 @@ function Sessions() {
     },
     {
       day: "DAY 3",
-      date: dates.replace(/.*–/, "")
-        ? dates.split(" ")[0] + " " + dates.replace(/.*–/, "").split(",")[0]
-        : "May 14, 2027",
+      date:conferenceDays[2],
       items: ["Keynote Lectures", "Technical Sessions", "Best Paper Awards", "Closing Ceremony"],
     },
   ];

@@ -14,7 +14,7 @@ import { Route as SubmissionRouteImport } from './routes/submission'
 import { Route as SpeakersRouteImport } from './routes/speakers'
 import { Route as RegistrationRouteImport } from './routes/registration'
 import { Route as ProgramRouteImport } from './routes/program'
-import { Route as DiscountRegisterationRouteImport } from './routes/discountRegisteration'
+import { Route as DiscountRegistrationRouteImport } from './routes/discount-registration'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CommitteeRouteImport } from './routes/committee'
 import { Route as AboutRouteImport } from './routes/about'
@@ -45,9 +45,9 @@ const ProgramRoute = ProgramRouteImport.update({
   path: '/program',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DiscountRegisterationRoute = DiscountRegisterationRouteImport.update({
-  id: '/discountRegisteration',
-  path: '/discountRegisteration',
+const DiscountRegistrationRoute = DiscountRegistrationRouteImport.update({
+  id: '/discount-registration',
+  path: '/discount-registration',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -76,7 +76,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/committee': typeof CommitteeRoute
   '/contact': typeof ContactRoute
-  '/discountRegisteration': typeof DiscountRegisterationRoute
+  '/discount-registration': typeof DiscountRegistrationRoute
   '/program': typeof ProgramRoute
   '/registration': typeof RegistrationRoute
   '/speakers': typeof SpeakersRoute
@@ -88,7 +88,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/committee': typeof CommitteeRoute
   '/contact': typeof ContactRoute
-  '/discountRegisteration': typeof DiscountRegisterationRoute
+  '/discount-registration': typeof DiscountRegistrationRoute
   '/program': typeof ProgramRoute
   '/registration': typeof RegistrationRoute
   '/speakers': typeof SpeakersRoute
@@ -101,7 +101,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/committee': typeof CommitteeRoute
   '/contact': typeof ContactRoute
-  '/discountRegisteration': typeof DiscountRegisterationRoute
+  '/discount-registration': typeof DiscountRegistrationRoute
   '/program': typeof ProgramRoute
   '/registration': typeof RegistrationRoute
   '/speakers': typeof SpeakersRoute
@@ -115,7 +115,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/committee'
     | '/contact'
-    | '/discountRegisteration'
+    | '/discount-registration'
     | '/program'
     | '/registration'
     | '/speakers'
@@ -127,7 +127,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/committee'
     | '/contact'
-    | '/discountRegisteration'
+    | '/discount-registration'
     | '/program'
     | '/registration'
     | '/speakers'
@@ -139,7 +139,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/committee'
     | '/contact'
-    | '/discountRegisteration'
+    | '/discount-registration'
     | '/program'
     | '/registration'
     | '/speakers'
@@ -152,7 +152,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   CommitteeRoute: typeof CommitteeRoute
   ContactRoute: typeof ContactRoute
-  DiscountRegisterationRoute: typeof DiscountRegisterationRoute
+  DiscountRegistrationRoute: typeof DiscountRegistrationRoute
   ProgramRoute: typeof ProgramRoute
   RegistrationRoute: typeof RegistrationRoute
   SpeakersRoute: typeof SpeakersRoute
@@ -197,11 +197,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/discountRegisteration': {
-      id: '/discountRegisteration'
-      path: '/discountRegisteration'
-      fullPath: '/discountRegisteration'
-      preLoaderRoute: typeof DiscountRegisterationRouteImport
+    '/discount-registration': {
+      id: '/discount-registration'
+      path: '/discount-registration'
+      fullPath: '/discount-registration'
+      preLoaderRoute: typeof DiscountRegistrationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -240,7 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   CommitteeRoute: CommitteeRoute,
   ContactRoute: ContactRoute,
-  DiscountRegisterationRoute: DiscountRegisterationRoute,
+  DiscountRegistrationRoute: DiscountRegistrationRoute,
   ProgramRoute: ProgramRoute,
   RegistrationRoute: RegistrationRoute,
   SpeakersRoute: SpeakersRoute,

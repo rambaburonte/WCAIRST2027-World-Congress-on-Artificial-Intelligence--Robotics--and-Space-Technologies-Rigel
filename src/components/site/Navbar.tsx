@@ -11,7 +11,7 @@ const links = [
   { to: "/speakers", label: "SPEAKERS" },
   { to: "/committee", label: "COMMITTEE" },
   { to: "/submission", label: "SUBMISSION" },
-  { to: "/registration", label: "REGISTRATION" },
+  // { to: "/registration", label: "REGISTRATION" },
   { to: "/venue", label: "VENUE" },
   { to: "/contact", label: "CONTACT" },
 ] as const;

@@ -301,11 +301,43 @@ export function AboutPage() {
   );
 }
 
-export function ProgramPage() {
+
+
+const getConferenceDays = (conferenceDates?: string) => {
+  if (!conferenceDates) {
+    return ["May 12, 2027", "May 13, 2027", "May 14, 2027"];
+  }
+
+  // Example: "May 12–14, 2027"
+  const match = conferenceDates.match(
+    /^([A-Za-z]+)\s+(\d+)[–-](\d+),\s*(\d{4})$/
+  );
+
+  if (!match) {
+    return [conferenceDates];
+  }
+
+  const [, month, startDay, endDay, year] = match;
+
+  const days = [];
+
+  for (let day = Number(startDay); day <= Number(endDay); day++) {
+    days.push(`${month} ${day}, ${year}`);
+  }
+
+  return days;
+};
+
+  
+ export function ProgramPage() {
+  const { conferenceData } = useConference();
+
+  const conferenceDays = getConferenceDays(conferenceData?.ConferenceDates);
+
   const days = [
     {
       day: "Day 1",
-      date: "12 May 2027",
+      date: conferenceDays[0] || "May 12, 2027",
       title: "Opening, plenaries and welcome sessions",
       items: [
         "Registration and check-in",
@@ -316,7 +348,7 @@ export function ProgramPage() {
     },
     {
       day: "Day 2",
-      date: "13 May 2027",
+      date: conferenceDays[1] || "May 13, 2027",
       title: "Parallel technical sessions and workshops",
       items: [
         "Invited talks",
@@ -327,7 +359,7 @@ export function ProgramPage() {
     },
     {
       day: "Day 3",
-      date: "14 May 2027",
+      date: conferenceDays[2] || "May 14, 2027",
       title: "Showcase, awards and closing forum",
       items: [
         "Young researcher spotlight",

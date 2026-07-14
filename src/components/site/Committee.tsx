@@ -51,6 +51,7 @@ function CommitteeCard({ member, index = 0, onClick }: { member: CommitteeMember
   );
 }
 
+
 export function CommitteePage() {
   const { committee, loading } = useConference();
   const [selected, setSelected] = useState<CommitteeMember | null>(null);

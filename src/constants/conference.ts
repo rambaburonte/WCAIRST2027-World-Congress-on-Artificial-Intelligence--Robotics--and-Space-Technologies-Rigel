@@ -249,28 +249,28 @@ export type CommitteeMember = {
 };
 
 export const COMMITTEE: CommitteeMember[] = [
-  {
-    name: "Prof. Laura Jenkins",
-    title: "Committee Chair",
-    institution: "Politecnico di Milano",
-    country: "Italy",
-    initials: "LJ",
-    accent: "from-blue-400 to-indigo-600",
-  },
-  {
-    name: "Dr. Marcus Vance",
-    title: "Committee Co-Chair",
-    institution: "MIT",
-    country: "United States",
-    initials: "MV",
-    accent: "from-fuchsia-400 to-purple-600",
-  },
-  {
-    name: "Prof. Elena Rostova",
-    title: "Scientific Advisor",
-    institution: "KTH Royal Institute of Technology",
-    country: "Sweden",
-    initials: "ER",
-    accent: "from-teal-400 to-emerald-600",
-  },
+  // {
+  //   name: "Prof. Laura Jenkins",
+  //   title: "Committee Chair",
+  //   institution: "Politecnico di Milano",
+  //   country: "Italy",
+  //   initials: "LJ",
+  //   accent: "from-blue-400 to-indigo-600",
+  // },
+  // {
+  //   name: "Dr. Marcus Vance",
+  //   title: "Committee Co-Chair",
+  //   institution: "MIT",
+  //   country: "United States",
+  //   initials: "MV",
+  //   accent: "from-fuchsia-400 to-purple-600",
+  // },
+  // {
+  //   name: "Prof. Elena Rostova",
+  //   title: "Scientific Advisor",
+  //   institution: "KTH Royal Institute of Technology",
+  //   country: "Sweden",
+  //   initials: "ER",
+  //   accent: "from-teal-400 to-emerald-600",
+  // },
 ];

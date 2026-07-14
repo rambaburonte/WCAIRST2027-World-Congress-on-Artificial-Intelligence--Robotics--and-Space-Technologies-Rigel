@@ -870,13 +870,28 @@ export function SubmissionPage() {
                 <div className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
                   Deadlines
                 </div>
-                <div className="mt-3 space-y-2 text-sm text-slate-100">
-                  <div>Submission opens: 15 Oct 2026</div>
-                  <div>
+
+                 <div className="mt-3 space-y-2 text-sm text-slate-100">
                     Abstract deadline:{" "}
-                    {formatDate(conferenceData?.abstract_submission_deadline) || "15 Jan 2027"}
+                    {formatDate(conferenceData?.abstract_submission_deadline)}
                   </div>
-                  <div>Acceptance notice: 20 Feb 2027</div>
+                <div className="mt-3 space-y-2 text-sm text-slate-100">
+                  {/* <div>Submission opens: 15 Oct 2026</div> */}
+
+                  <div>
+  Early Bird Registration Deadline:{" "}
+
+   
+  {formatDate(conferenceData?.EarlyBird) }
+</div>
+                 
+                  <div className="mt-3 space-y-2 text-sm text-slate-100">
+  Acceptance notice:{" "}
+  Within 24hrs
+
+
+  
+</div>
                 </div>
               </div>
             </div>

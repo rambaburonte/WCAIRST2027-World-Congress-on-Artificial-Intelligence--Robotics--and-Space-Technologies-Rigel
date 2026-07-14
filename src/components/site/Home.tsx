@@ -31,8 +31,8 @@ const fadeUp = {
 function Hero() {
   const { conferenceData, getConferenceName } = useConference();
   const name = getConferenceName();
-  const dates = conferenceData?.ConferenceDates || "May 12–14, 2027";
-  const venue = conferenceData?.ConferenceVenue || "Milan, Italy";
+  const dates = conferenceData?.ConferenceDates ;
+  const venue = conferenceData?.ConferenceVenue ;
 
   return (
     <section className="relative overflow-hidden bg-navy text-white">
@@ -103,7 +103,7 @@ function Statistics() {
   const { speakers } = useConference();
   const stats = [
     { icon: Users, value: "500+", label: "Participants" },
-    { icon: Mic, value: `${speakers.length || 70}+`, label: "Expert Speakers" },
+    { icon: Mic, value: `${speakers.length || 70}+`, label: "Expert" },
     { icon: Globe, value: "40+", label: "Countries" },
     { icon: Handshake, value: "20+", label: "Sponsors & Exhibitors" },
   ];
@@ -521,19 +521,19 @@ function Dates() {
   };
 
   const dates = [
-    ["Abstract Submission Opens", "Oct 15, 2026"],
+    ["Abstract Submission Opens", "July 14, 2026"],
     [
       "Abstract Submission Deadline",
-      formatDate(conferenceData?.abstract_submission_deadline) || "Jan 15, 2027",
+      formatDate(conferenceData?.abstract_submission_deadline),
     ],
-    ["Notification of Acceptance", "Feb 20, 2027"],
-    ["Early Bird Registration Deadline", formatDate(conferenceData?.EarlyBird) || "Mar 10, 2027"],
-    ["Regular Registration Deadline", formatDate(conferenceData?.mid_term) || "Apr 20, 2027"],
+    ["Notification of Acceptance", "Within 24hrs"],
+    ["Early Bird Registration Deadline", formatDate(conferenceData?.EarlyBird) ],
+    ["Regular Registration Deadline", formatDate(conferenceData?.mid_term) || "Dec 17, 2026"],
     [
       "Final Paper Submission Deadline",
-      formatDate(conferenceData?.registration_deadline) || "Apr 30, 2027",
+      formatDate(conferenceData?.registration_deadline) || "Apr 27, 2027",
     ],
-    ["Conference Dates", conferenceData?.ConferenceDates || "May 12–14, 2027"],
+    ["Conference Dates", conferenceData?.ConferenceDates || "May 16–18, 2027"],
   ];
 
   return (

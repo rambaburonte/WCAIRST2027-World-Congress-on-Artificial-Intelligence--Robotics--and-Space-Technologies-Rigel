@@ -1,6 +1,6 @@
 // Allow overriding the backend URL via Vite env variable `VITE_API_BASE`.
 // Example in development: VITE_API_BASE=http://localhost:3000
-const BACKEND_URL = (import.meta.env && import.meta.env.VITE_API_BASE) || "https://api.ccai2026.com";
+const BACKEND_URL = (import.meta.env && import.meta.env.VITE_API_BASE) || "https://api.rigelworld.com";
 const API_BASE = `${BACKEND_URL.replace(/\/$/, "")}/api`;
 
 const CACHE_DURATION = 5 * 60 * 1000;

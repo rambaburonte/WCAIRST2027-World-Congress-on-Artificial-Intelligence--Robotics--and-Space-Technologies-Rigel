@@ -20,10 +20,10 @@ jobs:
       - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: 217.196.55.155
-          username: u629132086.wcmae.com
-          password: kMAK7syq9mdH2o?T
+          server: 31.97.133.241
+          username: rigeladmin
+          password: Rigel@950
           local-dir: dist/
-          server-dir: ./
+          server-dir: /home/rigeladmin/web/wcmae.com/public_html/
           exclude: |
             **/.htaccess

@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { useConference, DEFAULT_SHORT_NAME } from "@/context/ConferenceContext";
 import { subscribe, getErrorMessage } from "@/lib/api";
 import { SpeakerCard } from "@/components/site/InnerPages";
+import hero1 from "/hero1.avif";
 import hero from "/hero.jpg";
 
 const fadeUp = {
@@ -160,7 +161,7 @@ function About() {
         <p className="mt-5 text-slate-600 leading-relaxed">
           The {getConferenceName()} brings together global experts, researchers, engineers, industry
           leaders and innovators to exchange knowledge, discuss cutting-edge advancements, and
-          explore future trends in mechanical and aerospace engineering.
+          explore future trends in artificial intelligence, robotics, and space technologies.
         </p>
         <Link
           to="/about"
@@ -214,8 +215,8 @@ function FeaturedSpeakers() {
               <div>
                 <h3 className="text-2xl font-bold text-navy">Plenary Speakers</h3>
                 <p className="text-sm text-slate-500">
-                  Leading experts delivering the main thematic talks across mechanical and aerospace
-                  engineering.
+                  Leading experts delivering the main thematic talks across AI, robotics, and space
+                  technologies.
                 </p>
               </div>
               <Link
@@ -272,8 +273,7 @@ function WhyAttend() {
         <div
           className="min-h-[300px] bg-cover bg-center"
           style={{
-            backgroundImage:
-              "url(https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=1200&q=80)",
+            backgroundImage: `url(${hero1})`,
           }}
         />
         <div className="px-6 sm:px-10 py-12 lg:py-16">

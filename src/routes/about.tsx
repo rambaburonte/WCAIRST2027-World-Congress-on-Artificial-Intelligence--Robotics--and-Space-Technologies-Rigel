@@ -4,7 +4,7 @@ import { Footer } from "@/components/site/Footer";
 import { AboutPage } from "@/components/site/InnerPages";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({ meta: [{ title: "About — WCMAE 2027" }] }),
+  head: () => ({ meta: [{ title: "About — WCAIRST 2027" }] }),
   component: () => (
     <div className="min-h-screen flex flex-col">
       <Navbar />

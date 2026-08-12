@@ -4,7 +4,7 @@ import { Footer } from "@/components/site/Footer";
 import { SpeakersPage } from "@/components/site/InnerPages";
 
 export const Route = createFileRoute("/speakers")({
-  head: () => ({ meta: [{ title: "Speakers — WCMAE 2027" }] }),
+  head: () => ({ meta: [{ title: "Speakers — WCAIRST 2027" }] }),
   component: () => (
     <div className="min-h-screen flex flex-col">
       <Navbar />

@@ -74,7 +74,7 @@ export const clearApiCache = () => apiCache.clear();
 export const getConferenceLoginDetails = async () => {
   const hostname = window.location.hostname.replace(/^www\./, "");
   const conferenceUrl =
-    hostname === "localhost" || hostname === "127.0.0.1" ? "wcmae.com" : hostname;
+    hostname === "localhost" || hostname === "127.0.0.1" ? "wcairst.com" : hostname;
   return cached(`login_${conferenceUrl}`, () =>
     apiRequest<unknown>(`/fetch/login-details/conference-url/${conferenceUrl}`),
   );

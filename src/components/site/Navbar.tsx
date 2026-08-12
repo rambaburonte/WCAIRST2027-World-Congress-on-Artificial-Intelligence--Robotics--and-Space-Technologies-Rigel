@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, Plane } from "lucide-react";
+import { Menu, X, Brain } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useConference } from "@/context/ConferenceContext";
 
@@ -20,21 +20,21 @@ export function Navbar() {
 const [open, setOpen] = useState(false);
   const { conferenceData } = useConference();
   
-  const shortName = conferenceData?.ShortName || "WCMAE2027";
+  const shortName = conferenceData?.ShortName || "WCAIRST2027";
   
   // 1. Find any 4-digit number in the string to use as the year
   const yearMatch = String(shortName).match(/\d{4}/);
   const yearName = yearMatch ? yearMatch[0] : "2027";
   
   // 2. Remove the year (and any optional hyphen/space before it) to get the base name
-  const baseName = String(shortName).replace(/[-\s]?\d{4}/, "").trim() || "WCMAE";
+  const baseName = String(shortName).replace(/[-\s]?\d{4}/, "").trim() || "WCAIRST";
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         <Link to="/" className="flex items-center gap-2 shrink-0">
           <div className="h-9 w-9 rounded-md bg-navy grid place-items-center text-gold">
-            <Plane className="h-5 w-5" />
+            <Brain className="h-5 w-5" />
           </div>
           <div className="leading-tight">
             <div className="font-bold text-navy tracking-tight">

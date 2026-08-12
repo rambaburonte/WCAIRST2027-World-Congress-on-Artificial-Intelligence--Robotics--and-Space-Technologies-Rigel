@@ -233,7 +233,7 @@ export function AboutPage() {
     <PageShell
       eyebrow="About the congress"
       title="A global forum for mechanical and aerospace innovation"
-      lead="WCMAE 2027 is designed as a practical meeting point for researchers, engineers, educators and industry leaders who want to exchange ideas, present solutions and build collaborations around the future of engineering."
+      lead="WCAIRST 2027 is designed as a practical meeting point for researchers, engineers, educators and industry leaders who want to exchange ideas, present solutions and build collaborations around the future of artificial intelligence, robotics, and space technologies."
       primary={{ label: "Submit abstract", to: "/submission" }}
       secondary={{ label: "Register now", to: "/registration" }}
     >
@@ -568,7 +568,7 @@ export function SpeakersPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">
             Speaker value
           </p>
-          <h3 className="mt-3 text-2xl font-bold">Why present at WCMAE 2027</h3>
+          <h3 className="mt-3 text-2xl font-bold">Why present at WCAIRST 2027</h3>
           <div className="mt-6 space-y-4 text-sm leading-6 text-slate-200">
             <p>
               Present your research to a focused audience that can understand both fundamentals and

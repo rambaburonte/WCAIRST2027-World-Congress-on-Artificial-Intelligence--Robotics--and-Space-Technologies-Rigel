@@ -6,7 +6,7 @@ import { DiscountRegistrationPage } from "@/components/site/InnerPages";
 
 
 export const Route = createFileRoute("/discount-registration")({
-  head: () => ({ meta: [{ title: "Registration — WCMAE 2027" }] }),
+  head: () => ({ meta: [{ title: "Registration — WCAIRST 2027" }] }),
   component: () => (
     <div className="min-h-screen flex flex-col">
       <Navbar />

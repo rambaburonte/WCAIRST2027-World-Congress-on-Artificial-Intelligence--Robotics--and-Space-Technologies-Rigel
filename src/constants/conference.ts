@@ -9,20 +9,22 @@ import {
   Leaf,
   Layers,
   ShieldCheck,
+  Users,
+  MapPin,
 } from "lucide-react";
 
 export const CONFERENCE = {
-  name: "World Congress on Mechanical and Aerospace Engineering",
-  short: "WCMAE-2027",
-  tagline: "Innovating Today for a Smarter, Safer and Sustainable Tomorrow",
-  subTagline: "Join leading researchers, professionals, and organizations in Milan.",
+  name: "World Congress on Artificial Intelligence, Robotics, and Space Technologies",
+  short: "WCAIRST-2027",
+  tagline: "Driving the next wave of intelligent robotics and space exploration.",
+  subTagline: "Join leading researchers, innovators, and organizations in Milan.",
   dates: "May 12–14, 2027",
   location: "Milan, Italy",
   venue: "Milan Convention Centre",
   address: "Milan, Italy",
-  email: "info@wcmae.com",
+  email: "info@wcairst.com",
   phone: "+39 02 1234 5678",
-  website: "www.wcmae.com",
+  website: "www.wcairst.com",
 };
 
 export const NAV_LINKS = [
@@ -123,55 +125,54 @@ export const SPEAKERS: Speaker[] = [
 
 export const SESSIONS = [
   {
-    title: "Advanced Manufacturing & Materials",
-    description: "Discussion on emerging composite materials, metallurgy, and smart manufacturing.",
-    icon: Wrench,
-  },
-  {
-    title: "Aerospace Vehicles & Propulsion",
-    description:
-      "Design challenges, propulsion efficiency, aerodynamics, and structural components.",
-    icon: Plane,
-  },
-  {
-    title: "Thermal & Fluid Systems",
-    description: "Thermodynamics, heat transfer solutions, and advanced fluid mechanics.",
-    icon: Thermometer,
-  },
-  {
-    title: "Design, Simulation & Optimization",
-    description: "CAD/CAM tools, structural optimization, and FEA modeling techniques.",
+    title: "Artificial Intelligence & Machine Learning",
+    description: "Advances in AI algorithms, neural networks, data-driven systems, and intelligent decision-making.",
     icon: Cpu,
   },
   {
-    title: "Structures, Dynamics & Vibration",
-    description: "Aeroelasticity, vibration suppression, and structural health monitoring.",
-    icon: Building2,
-  },
-  {
-    title: "Control, Automation & Mechatronics",
-    description: "Robotics, aerospace flight control, and automated industrial assembly.",
+    title: "Robotics and Autonomous Systems",
+    description: "Robotic platforms, autonomy, control systems, perception, and intelligent mobility.",
     icon: Bot,
   },
   {
-    title: "Emerging Technologies in Engineering",
-    description: "Nanotechnology, AI and machine learning applied to engineering problems.",
-    icon: Zap,
+    title: "Space Systems and Satellite Technologies",
+    description: "Satellite design, orbital systems, space operations, and mission architecture.",
+    icon: Plane,
   },
   {
-    title: "Sustainability & Green Engineering",
-    description: "Eco-design, life cycle assessments, and renewable energy mechanical components.",
-    icon: Leaf,
+    title: "Human-Robot Interaction",
+    description: "Collaborative robotics, safety, ergonomics, and AI-enabled human-machine interfaces.",
+    icon: Users,
   },
   {
-    title: "Additive Manufacturing",
-    description: "3D printing of metal alloys and lightweight polymers for aerospace.",
+    title: "Autonomous Vehicles & Drones",
+    description: "Navigation, perception, autonomy, and deployment of aerial and ground robotic systems.",
+    icon: MapPin,
+  },
+  {
+    title: "Space Exploration & Mission Design",
+    description: "Interplanetary robotics, mission planning, propulsion systems, and deep space operations.",
+    icon: Plane,
+  },
+  {
+    title: "Intelligent Sensing & Computer Vision",
+    description: "Sensor fusion, perception, computer vision, and real-time environmental awareness.",
     icon: Layers,
   },
   {
-    title: "Safety, Reliability & Maintenance",
-    description: "Failure analysis, predictive maintenance, and quality assurance workflows.",
+    title: "AI Ethics, Policy & Safety",
+    description: "Responsible AI, governance, trust, safety, and regulatory issues for intelligent systems.",
     icon: ShieldCheck,
+  },
+  {
+    title: "Space Robotics & Automation",
+    description: "Robotic systems for satellite servicing, planetary exploration, and space infrastructure.",
+    icon: Building2,
+  },
+  {
+    title: "Future Technologies in AI and Space",
+    description: "Emerging science, next-generation systems and disruptive solutions at the intersection of AI and space.",
+    icon: Zap,
   },
 ];
 

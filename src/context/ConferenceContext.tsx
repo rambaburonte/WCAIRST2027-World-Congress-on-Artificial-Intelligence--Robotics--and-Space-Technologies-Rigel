@@ -16,7 +16,7 @@ import {
   getVenueInfo,
 } from "@/lib/api";
 
-export const DEFAULT_SHORT_NAME = "WCMAE2027";
+export const DEFAULT_SHORT_NAME = "WCAIRST2027";
 
 type ConferenceData = {
   ConferenceTitle?: string;
@@ -111,7 +111,7 @@ function normalizeSpeaker(member: Record<string, unknown>, index: number): Speak
     title:
       text(member.title ?? member.Role ?? member.designation ?? member.position) ||
       "Conference Speaker",
-    institution: institution || "WCMAE 2027 Faculty",
+    institution: institution || "WCAIRST 2027 Faculty",
     country,
     flag: "",
     category: category.toLowerCase().includes("keynote") ? "Keynote" : "Plenary",
@@ -147,7 +147,7 @@ function normalizeCommitteeMember(
     title:
       text(member.title ?? member.Role ?? member.designation ?? member.position) ||
       "Committee Member",
-    institution: institution || "WCMAE 2027 Committee",
+    institution: institution || "WCAIRST 2027 Committee",
     country,
     initials,
     accent: colors[index % colors.length],

@@ -4,7 +4,7 @@ import { Footer } from "@/components/site/Footer";
 import { CommitteePage } from "@/components/site/Committee";
 
 export const Route = createFileRoute("/committee")({
-  head: () => ({ meta: [{ title: "Committee — WCMAE 2027" }] }),
+  head: () => ({ meta: [{ title: "Committee — WCAIRST 2027" }] }),
   component: () => (
     <div className="min-h-screen flex flex-col">
       <Navbar />

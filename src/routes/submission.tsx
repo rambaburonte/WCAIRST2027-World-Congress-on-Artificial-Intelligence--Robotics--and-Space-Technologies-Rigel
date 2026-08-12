@@ -4,7 +4,7 @@ import { Footer } from "@/components/site/Footer";
 import { SubmissionPage } from "@/components/site/InnerPages";
 
 export const Route = createFileRoute("/submission")({
-  head: () => ({ meta: [{ title: "Abstract Submission — WCMAE 2027" }] }),
+  head: () => ({ meta: [{ title: "Abstract Submission — WCAIRST 2027" }] }),
   component: () => (
     <div className="min-h-screen flex flex-col">
       <Navbar />

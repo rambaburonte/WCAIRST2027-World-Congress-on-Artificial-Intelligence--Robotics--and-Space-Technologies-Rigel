@@ -85,7 +85,7 @@ function imageUrl(value: unknown): string {
   const url = text(value);
   if (!url) return "";
   if (/^https?:\/\//i.test(url)) return url;
-  return `https://ccai2026.com/${url.replace(/^\/+/, "")}`;
+  return `https://wcairst2027.com/${url.replace(/^\/+/, "")}`;
 }
 
 function normalizeSpeaker(member: Record<string, unknown>, index: number): Speaker | null {

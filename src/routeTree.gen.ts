@@ -14,6 +14,8 @@ import { Route as SubmissionRouteImport } from './routes/submission'
 import { Route as SpeakersRouteImport } from './routes/speakers'
 import { Route as RegistrationRouteImport } from './routes/registration'
 import { Route as ProgramRouteImport } from './routes/program'
+import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
+import { Route as PaymentCancelRouteImport } from './routes/payment-cancel'
 import { Route as DiscountRegistrationRouteImport } from './routes/discount-registration'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CommitteeRouteImport } from './routes/committee'
@@ -43,6 +45,16 @@ const RegistrationRoute = RegistrationRouteImport.update({
 const ProgramRoute = ProgramRouteImport.update({
   id: '/program',
   path: '/program',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
+  id: '/payment-success',
+  path: '/payment-success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentCancelRoute = PaymentCancelRouteImport.update({
+  id: '/payment-cancel',
+  path: '/payment-cancel',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DiscountRegistrationRoute = DiscountRegistrationRouteImport.update({
@@ -77,6 +89,8 @@ export interface FileRoutesByFullPath {
   '/committee': typeof CommitteeRoute
   '/contact': typeof ContactRoute
   '/discount-registration': typeof DiscountRegistrationRoute
+  '/payment-cancel': typeof PaymentCancelRoute
+  '/payment-success': typeof PaymentSuccessRoute
   '/program': typeof ProgramRoute
   '/registration': typeof RegistrationRoute
   '/speakers': typeof SpeakersRoute
@@ -89,6 +103,8 @@ export interface FileRoutesByTo {
   '/committee': typeof CommitteeRoute
   '/contact': typeof ContactRoute
   '/discount-registration': typeof DiscountRegistrationRoute
+  '/payment-cancel': typeof PaymentCancelRoute
+  '/payment-success': typeof PaymentSuccessRoute
   '/program': typeof ProgramRoute
   '/registration': typeof RegistrationRoute
   '/speakers': typeof SpeakersRoute
@@ -102,6 +118,8 @@ export interface FileRoutesById {
   '/committee': typeof CommitteeRoute
   '/contact': typeof ContactRoute
   '/discount-registration': typeof DiscountRegistrationRoute
+  '/payment-cancel': typeof PaymentCancelRoute
+  '/payment-success': typeof PaymentSuccessRoute
   '/program': typeof ProgramRoute
   '/registration': typeof RegistrationRoute
   '/speakers': typeof SpeakersRoute
@@ -116,6 +134,8 @@ export interface FileRouteTypes {
     | '/committee'
     | '/contact'
     | '/discount-registration'
+    | '/payment-cancel'
+    | '/payment-success'
     | '/program'
     | '/registration'
     | '/speakers'
@@ -128,6 +148,8 @@ export interface FileRouteTypes {
     | '/committee'
     | '/contact'
     | '/discount-registration'
+    | '/payment-cancel'
+    | '/payment-success'
     | '/program'
     | '/registration'
     | '/speakers'
@@ -140,6 +162,8 @@ export interface FileRouteTypes {
     | '/committee'
     | '/contact'
     | '/discount-registration'
+    | '/payment-cancel'
+    | '/payment-success'
     | '/program'
     | '/registration'
     | '/speakers'
@@ -153,6 +177,8 @@ export interface RootRouteChildren {
   CommitteeRoute: typeof CommitteeRoute
   ContactRoute: typeof ContactRoute
   DiscountRegistrationRoute: typeof DiscountRegistrationRoute
+  PaymentCancelRoute: typeof PaymentCancelRoute
+  PaymentSuccessRoute: typeof PaymentSuccessRoute
   ProgramRoute: typeof ProgramRoute
   RegistrationRoute: typeof RegistrationRoute
   SpeakersRoute: typeof SpeakersRoute
@@ -241,6 +267,8 @@ const rootRouteChildren: RootRouteChildren = {
   CommitteeRoute: CommitteeRoute,
   ContactRoute: ContactRoute,
   DiscountRegistrationRoute: DiscountRegistrationRoute,
+  PaymentCancelRoute: PaymentCancelRoute,
+  PaymentSuccessRoute: PaymentSuccessRoute,
   ProgramRoute: ProgramRoute,
   RegistrationRoute: RegistrationRoute,
   SpeakersRoute: SpeakersRoute,

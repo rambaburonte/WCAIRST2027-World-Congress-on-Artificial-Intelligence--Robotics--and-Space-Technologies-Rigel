@@ -740,13 +740,8 @@ export function SubmissionPage() {
         fd.append("file", form.file, form.file.name);
       }
 
-      const response = await submitAbstract(fd);
-      const id = response.submissionId || response.referenceId || response.id || response.message;
-      toast.success(
-        id
-          ? `Abstract submitted successfully. Reference ID: ${id}`
-          : "Abstract submitted successfully.",
-      );
+      await submitAbstract(fd);
+      toast.success("Abstract Form Submitted Successfully.");
 
       // Reset form
       setForm({

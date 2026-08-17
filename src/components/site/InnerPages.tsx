@@ -2110,7 +2110,7 @@ export function VenuePage() {
       <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 items-start">
         <div className="rounded-3xl overflow-hidden shadow-xl">
           <img
-            src="https://images.unsplash.com/photo-1529260830199-42c24126f198?w=1200&q=80"
+            src="./milanimg.jpg"
             alt="Milan city"
             className="h-full w-full object-cover min-h-[420px]"
             loading="lazy"

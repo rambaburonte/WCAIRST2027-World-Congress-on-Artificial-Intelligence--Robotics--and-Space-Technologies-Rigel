@@ -14,6 +14,12 @@ import {
   MapPin,
   Check,
   Mail,
+  Rocket,
+  Bot,
+  BrainCircuit,
+  Plane,
+  Leaf,
+  ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useConference, DEFAULT_SHORT_NAME } from "@/context/ConferenceContext";
@@ -464,6 +470,20 @@ function Sessions() {
   );
 }
 
+function getTrackIconForName(trackName: string) {
+  const value = trackName.toLowerCase();
+
+  if (/(ai|artificial intelligence|machine learning|deep learning|cognitive|neural|brain|intelligence)/.test(value)) return BrainCircuit;
+  if (/(robot|automation|autonomous|control|vision|intelligent systems|cyber)/.test(value)) return Bot;
+  if (/(space|aerospace|rocket|orbit|satellite|exploration|astronomy|launch)/.test(value)) return Rocket;
+  if (/(transport|mobility|drone|flight|aviation|uav|navigation)/.test(value)) return Plane;
+  if (/(sustain|green|climate|environment|energy|earth|ecology|renew)/.test(value)) return Leaf;
+  if (/(health|safety|risk|security|resilience|defense|policy)/.test(value)) return ShieldCheck;
+  if (/(people|community|professionals|team|network|user|speaker)/.test(value)) return Users;
+
+  return Lightbulb;
+}
+
 function Tracks() {
   const { tracks } = useConference();
 
@@ -484,17 +504,13 @@ function Tracks() {
         </div>
         <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {tracks.map((track) => {
-            const Icon = track.icon;
+            const fallbackIcon = getTrackIconForName(track.name);
+            const Icon = track.icon && typeof track.icon !== "string" ? track.icon : fallbackIcon;
+
             return (
               <div key={track.id} className="text-center group cursor-pointer">
                 <div className="mx-auto h-14 w-14 grid place-items-center rounded-full bg-white shadow group-hover:bg-navy transition-colors">
-                  {typeof Icon === "string" ? (
-                    <span className="text-xl">{Icon}</span>
-                  ) : Icon ? (
-                    <Icon className="h-6 w-6 text-navy group-hover:text-gold transition-colors" />
-                  ) : (
-                    <span className="text-xl">➕</span>
-                  )}
+                  <Icon className="h-6 w-6 text-navy group-hover:text-gold transition-colors" />
                 </div>
                 <div className="mt-3 text-xs font-semibold text-slate-700">{track.name}</div>
               </div>

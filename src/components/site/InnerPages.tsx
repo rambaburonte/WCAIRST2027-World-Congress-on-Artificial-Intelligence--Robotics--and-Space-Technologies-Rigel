@@ -2214,7 +2214,7 @@ export function ContactPage() {
   };
 
   const emailVal = getConferenceEmail();
-  const phoneVal = (conferenceData?.Phone as string) || "+39 02 1234 5678";
+  const phoneVal = (conferenceData?.Phone as string) || "+44 7344897352";
 
   return (
     <PageShell

@@ -3,7 +3,7 @@ import { useConference } from "@/context/ConferenceContext";
 
 export function Footer() {
   const { getConferenceName, getConferenceEmail, conferenceData } = useConference();
-  const phone = (conferenceData?.Phone as string) || "+39 02 1234 5678";
+  const phone = (conferenceData?.Phone as string) || "+44 7344897352";
 
   return (
     <footer className="bg-navy-deep text-slate-300">

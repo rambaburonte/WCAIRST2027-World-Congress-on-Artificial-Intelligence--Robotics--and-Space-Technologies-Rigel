@@ -225,16 +225,16 @@ function FeaturedSpeakers() {
                   technologies.
                 </p>
               </div>
-              <Link
+              {/* <Link
                 to="/speakers"
                 className="inline-flex items-center rounded-md border border-navy px-4 py-2 text-sm font-semibold text-navy hover:bg-navy hover:text-white transition-colors"
               >
                 View All Speakers
-              </Link>
+              </Link> */}
             </div>
             <div className="mt-6 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
               {plenary.length > 0 ? (
-                plenary.slice(0, 3).map(speakerCard)
+                plenary.slice(0, 4).map(speakerCard)
               ) : (
                 <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center text-slate-500">
                   Plenary speaker details are being loaded from the conference backend.

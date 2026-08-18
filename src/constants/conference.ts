@@ -23,7 +23,7 @@ export const CONFERENCE = {
   venue: "Milan Convention Centre",
   address: "Milan, Italy",
   email: "info@wcairst.com",
-  phone: "+39 02 1234 5678",
+  phone: "+44 7344897352",
   website: "www.wcairst.com",
 };
 

@@ -221,18 +221,18 @@ function Field({
 
 export function AboutPage() {
   const themes = [
-    "Advanced manufacturing and smart materials",
-    "Aerospace vehicles, propulsion and flight systems",
-    "Thermal sciences, fluids and energy systems",
-    "Simulation, digital twins and computational design",
-    "Mechatronics, automation and robotics integration",
-    "Reliability, safety and sustainable engineering",
+    "Artificial Intelligence and Machine Learning",
+    "Robotics and Autonomous Systems",
+    "Space Systems and Satellite Technologies",
+    "Human-Robot Interaction and Collaboration",
+    "Computer Vision and Intelligent Sensing",
+    "AI Ethics, Policy and Safe Deployment",
   ];
 
   return (
     <PageShell
       eyebrow="About the congress"
-      title="A global forum for mechanical and aerospace innovation"
+      title="A global forum for AI, Robotics and Space Technology Innovation"
       lead="WCAIRST 2027 is designed as a practical meeting point for researchers, engineers, educators and industry leaders who want to exchange ideas, present solutions and build collaborations around the future of artificial intelligence, robotics, and space technologies."
       primary={{ label: "Submit abstract", to: "/submission" }}
       secondary={{ label: "Register now", to: "/registration" }}
@@ -260,7 +260,7 @@ export function AboutPage() {
           <SectionTitle
             eyebrow="Congress focus"
             title="What the event is built around"
-            lead="The congress highlights current research, practical implementations and future-facing technologies across the mechanical and aerospace ecosystem."
+            lead="The congress highlights current research, practical implementations and future-facing technologies across artificial intelligence, robotics, and space exploration systems."
           />
           <div className="mt-8 grid sm:grid-cols-2 gap-4">
             <div className="rounded-2xl bg-slate-50 p-5">
@@ -660,16 +660,16 @@ export function SubmissionPage() {
     contextTracks.length > 0
       ? contextTracks.map((t) => t.name)
       : [
-          "Advanced Manufacturing & Materials",
-          "Aerospace Vehicles & Propulsion",
-          "Thermal & Fluid Systems",
-          "Design, Simulation & Optimization",
-          "Structures, Dynamics & Vibration",
-          "Control, Automation & Mechatronics",
-          "Emerging Technologies in Engineering",
-          "Sustainability & Green Engineering",
-          "Additive Manufacturing",
-          "Safety, Reliability & Maintenance",
+          "Artificial Intelligence & Machine Learning",
+          "Robotics & Autonomous Systems",
+          "Space Systems & Satellite Technology",
+          "Human-Robot Interaction",
+          "Computer Vision & Sensing",
+          "Autonomous Vehicles & Drones",
+          "Space Exploration & Mission Design",
+          "AI Ethics, Policy & Safety",
+          "Space Robotics & Automation",
+          "Future Technologies in AI & Space",
         ];
 
   const formatDate = (dateStr?: string) => {

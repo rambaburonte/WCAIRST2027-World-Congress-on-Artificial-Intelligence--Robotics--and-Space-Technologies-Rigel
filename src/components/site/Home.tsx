@@ -270,7 +270,7 @@ function WhyAttend() {
   const points = [
     "Learn from world-class experts and keynote speakers",
     "Present your research and gain global visibility",
-    "Explore innovations in mechanical and aerospace industries",
+    "Explore innovations in AI, robotics, and space technologies",
     "Discover collaboration and funding opportunities",
     "Enjoy the vibrant atmosphere of the host city",
   ];

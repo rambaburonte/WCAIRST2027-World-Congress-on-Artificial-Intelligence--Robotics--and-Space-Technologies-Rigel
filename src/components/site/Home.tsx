@@ -109,8 +109,9 @@ function Hero() {
 function Statistics() {
   const { speakers } = useConference();
   const stats = [
+    // `${speakers.length || 70}+`
     { icon: Users, value: "500+", label: "Participants" },
-    { icon: Mic, value: `${speakers.length || 70}+`, label: "Expert" },
+    { icon: Mic, value: "100+", label: "Expert" },
     { icon: Globe, value: "40+", label: "Countries" },
     { icon: Handshake, value: "20+", label: "Sponsors & Exhibitors" },
   ];

@@ -235,7 +235,7 @@ function FeaturedSpeakers() {
             </div>
             <div className="mt-6 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
               {plenary.length > 0 ? (
-                plenary.slice(0, 4).map(speakerCard)
+                plenary.map(speakerCard)
               ) : (
                 <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center text-slate-500">
                   Plenary speaker details are being loaded from the conference backend.
@@ -251,7 +251,7 @@ function FeaturedSpeakers() {
             </p>
             <div className="mt-6 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
               {keynote.length > 0 ? (
-                keynote.slice(0, 3).map(speakerCard)
+                keynote.map(speakerCard)
               ) : (
                 <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center text-slate-500">
                   Keynote speaker details are being loaded from the conference backend.

@@ -11,11 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VenueRouteImport } from './routes/venue'
 import { Route as SubmissionRouteImport } from './routes/submission'
+import { Route as SponsorshipsRouteImport } from './routes/sponsorships'
 import { Route as SpeakersRouteImport } from './routes/speakers'
 import { Route as RegistrationRouteImport } from './routes/registration'
 import { Route as ProgramRouteImport } from './routes/program'
 import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
 import { Route as PaymentCancelRouteImport } from './routes/payment-cancel'
+import { Route as ExhibitorsRouteImport } from './routes/exhibitors'
 import { Route as DiscountRegistrationRouteImport } from './routes/discount-registration'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CommitteeRouteImport } from './routes/committee'
@@ -30,6 +32,11 @@ const VenueRoute = VenueRouteImport.update({
 const SubmissionRoute = SubmissionRouteImport.update({
   id: '/submission',
   path: '/submission',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SponsorshipsRoute = SponsorshipsRouteImport.update({
+  id: '/sponsorships',
+  path: '/sponsorships',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SpeakersRoute = SpeakersRouteImport.update({
@@ -55,6 +62,11 @@ const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
 const PaymentCancelRoute = PaymentCancelRouteImport.update({
   id: '/payment-cancel',
   path: '/payment-cancel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExhibitorsRoute = ExhibitorsRouteImport.update({
+  id: '/exhibitors',
+  path: '/exhibitors',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DiscountRegistrationRoute = DiscountRegistrationRouteImport.update({
@@ -89,11 +101,13 @@ export interface FileRoutesByFullPath {
   '/committee': typeof CommitteeRoute
   '/contact': typeof ContactRoute
   '/discount-registration': typeof DiscountRegistrationRoute
+  '/exhibitors': typeof ExhibitorsRoute
   '/payment-cancel': typeof PaymentCancelRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/program': typeof ProgramRoute
   '/registration': typeof RegistrationRoute
   '/speakers': typeof SpeakersRoute
+  '/sponsorships': typeof SponsorshipsRoute
   '/submission': typeof SubmissionRoute
   '/venue': typeof VenueRoute
 }
@@ -103,11 +117,13 @@ export interface FileRoutesByTo {
   '/committee': typeof CommitteeRoute
   '/contact': typeof ContactRoute
   '/discount-registration': typeof DiscountRegistrationRoute
+  '/exhibitors': typeof ExhibitorsRoute
   '/payment-cancel': typeof PaymentCancelRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/program': typeof ProgramRoute
   '/registration': typeof RegistrationRoute
   '/speakers': typeof SpeakersRoute
+  '/sponsorships': typeof SponsorshipsRoute
   '/submission': typeof SubmissionRoute
   '/venue': typeof VenueRoute
 }
@@ -118,11 +134,13 @@ export interface FileRoutesById {
   '/committee': typeof CommitteeRoute
   '/contact': typeof ContactRoute
   '/discount-registration': typeof DiscountRegistrationRoute
+  '/exhibitors': typeof ExhibitorsRoute
   '/payment-cancel': typeof PaymentCancelRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/program': typeof ProgramRoute
   '/registration': typeof RegistrationRoute
   '/speakers': typeof SpeakersRoute
+  '/sponsorships': typeof SponsorshipsRoute
   '/submission': typeof SubmissionRoute
   '/venue': typeof VenueRoute
 }
@@ -134,11 +152,13 @@ export interface FileRouteTypes {
     | '/committee'
     | '/contact'
     | '/discount-registration'
+    | '/exhibitors'
     | '/payment-cancel'
     | '/payment-success'
     | '/program'
     | '/registration'
     | '/speakers'
+    | '/sponsorships'
     | '/submission'
     | '/venue'
   fileRoutesByTo: FileRoutesByTo
@@ -148,11 +168,13 @@ export interface FileRouteTypes {
     | '/committee'
     | '/contact'
     | '/discount-registration'
+    | '/exhibitors'
     | '/payment-cancel'
     | '/payment-success'
     | '/program'
     | '/registration'
     | '/speakers'
+    | '/sponsorships'
     | '/submission'
     | '/venue'
   id:
@@ -162,11 +184,13 @@ export interface FileRouteTypes {
     | '/committee'
     | '/contact'
     | '/discount-registration'
+    | '/exhibitors'
     | '/payment-cancel'
     | '/payment-success'
     | '/program'
     | '/registration'
     | '/speakers'
+    | '/sponsorships'
     | '/submission'
     | '/venue'
   fileRoutesById: FileRoutesById
@@ -177,11 +201,13 @@ export interface RootRouteChildren {
   CommitteeRoute: typeof CommitteeRoute
   ContactRoute: typeof ContactRoute
   DiscountRegistrationRoute: typeof DiscountRegistrationRoute
+  ExhibitorsRoute: typeof ExhibitorsRoute
   PaymentCancelRoute: typeof PaymentCancelRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
   ProgramRoute: typeof ProgramRoute
   RegistrationRoute: typeof RegistrationRoute
   SpeakersRoute: typeof SpeakersRoute
+  SponsorshipsRoute: typeof SponsorshipsRoute
   SubmissionRoute: typeof SubmissionRoute
   VenueRoute: typeof VenueRoute
 }
@@ -200,6 +226,13 @@ declare module '@tanstack/react-router' {
       path: '/submission'
       fullPath: '/submission'
       preLoaderRoute: typeof SubmissionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sponsorships': {
+      id: '/sponsorships'
+      path: '/sponsorships'
+      fullPath: '/sponsorships'
+      preLoaderRoute: typeof SponsorshipsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/speakers': {
@@ -235,6 +268,13 @@ declare module '@tanstack/react-router' {
       path: '/payment-cancel'
       fullPath: '/payment-cancel'
       preLoaderRoute: typeof PaymentCancelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exhibitors': {
+      id: '/exhibitors'
+      path: '/exhibitors'
+      fullPath: '/exhibitors'
+      preLoaderRoute: typeof ExhibitorsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/discount-registration': {
@@ -281,11 +321,13 @@ const rootRouteChildren: RootRouteChildren = {
   CommitteeRoute: CommitteeRoute,
   ContactRoute: ContactRoute,
   DiscountRegistrationRoute: DiscountRegistrationRoute,
+  ExhibitorsRoute: ExhibitorsRoute,
   PaymentCancelRoute: PaymentCancelRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
   ProgramRoute: ProgramRoute,
   RegistrationRoute: RegistrationRoute,
   SpeakersRoute: SpeakersRoute,
+  SponsorshipsRoute: SponsorshipsRoute,
   SubmissionRoute: SubmissionRoute,
   VenueRoute: VenueRoute,
 }

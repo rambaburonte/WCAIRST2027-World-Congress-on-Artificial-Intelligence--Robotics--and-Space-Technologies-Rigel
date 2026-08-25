@@ -11,6 +11,8 @@ const links = [
   { to: "/speakers", label: "SPEAKERS" },
   { to: "/committee", label: "COMMITTEE" },
   { to: "/submission", label: "SUBMISSION" },
+  { to: "/sponsorships", label: "SPONSORSHIP" },
+  { to: "/exhibitors", label: "EXHIBITORS" },
   // { to: "/registration", label: "REGISTRATION" },
   { to: "/venue", label: "VENUE" },
   { to: "/contact", label: "CONTACT" },

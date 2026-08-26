@@ -1070,6 +1070,7 @@ export function RegistrationPage() {
     ["delegate", "Delegate", "For general conference attendees."],
     ["listener", "Listener", "For attendees who want to listen to the scientific tracks."],
     ["student", "Student", "For full-time students with valid ID."],
+    ["exhibitor", "Exhibitor", "For organizations showcasing products, services and solutions."],
     ["poster", "Poster", "For poster and visual presentation authors."],
     // ["virtual", "Virtual", "For online-only participation."],
     // ["discount", "Discount", "For a reduced or sponsored registration amount."],
@@ -1185,25 +1186,19 @@ export function RegistrationPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
               {getPricingTierLabel()} Rate Level
             </p>
-            <div className="mt-5 space-y-3">
-              {categories.map(([value, title, text]) => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => setForm((prev) => ({ ...prev, category: value }))}
-                  className={`w-full rounded-2xl border px-4 py-3 text-left transition ${
-                    form.category === value
-                      ? "border-navy bg-navy/5 text-navy font-semibold"
-                      : "border-slate-200 bg-white text-slate-700 hover:border-navy/40"
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="font-semibold">{title}</span>
-                    <span className="text-xs font-bold text-navy">€{getPricing(value)}</span>
-                  </div>
-                  <p className="mt-1 text-xs text-slate-500 leading-relaxed">{text}</p>
-                </button>
-              ))}
+            <div className="mt-5">
+              <label htmlFor="registration-category" className="text-sm font-semibold text-navy">Registration type</label>
+              <select
+                id="registration-category"
+                value={form.category}
+                onChange={(event) => setForm((prev) => ({ ...prev, category: event.target.value }))}
+                className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none focus:border-navy"
+              >
+                {categories.map(([value, title]) => <option key={value} value={value}>{title}</option>)}
+              </select>
+              <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                {categories.find(([value]) => value === form.category)?.[2]}
+              </p>
             </div>
           </div>
 
@@ -1314,6 +1309,7 @@ export function RegistrationPage() {
                 ["delegate", "Delegate"],
                 ["listener", "Listener"],
                 ["student", "Student"],
+                ["exhibitor", "Exhibitor"],
                 ["poster", "Poster"],
                 // ["virtual", "Virtual"],
                 // ["discount", "Discount"],

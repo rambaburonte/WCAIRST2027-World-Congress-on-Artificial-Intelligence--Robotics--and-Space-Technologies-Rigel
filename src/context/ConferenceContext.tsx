@@ -274,6 +274,7 @@ export function ConferenceProvider({ children }: { children: ReactNode }) {
       listener: 549,
       poster: 499,
       student: 349,
+      exhibitor: 5000,
       virtual: 299,
       discount: 399,
     };

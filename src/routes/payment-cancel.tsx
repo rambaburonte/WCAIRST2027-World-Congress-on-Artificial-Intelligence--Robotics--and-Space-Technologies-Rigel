@@ -5,81 +5,54 @@ import { Button } from "@/components/ui/button";
 import { useConference } from "@/context/ConferenceContext";
 
 export const Route = createFileRoute("/payment-cancel")({
-  head: () => ({ meta: [{ title: "Payment cancelled — WCAIRST 2027" }] }),
+  head: () => ({
+    meta: [{ title: "Payment Cancelled" }],
+  }),
   component: PaymentCancelPage,
 });
 
-function PaymentCancelPage() {
-  const { getConferenceName } = useConference();
+export function PaymentCancelPage() {
+  const conf = useConference() as any;
+  const confName = (conf?.getConferenceName && conf.getConferenceName()) || conf?.conferenceData?.ConferenceTitle || conf?.siteConfig?.name || "WCAIRST-2027";
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <main className="min-h-screen bg-background overflow-x-hidden">
       <Navbar />
-
-      <main className="flex-1">
-        <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-            <div className="bg-navy px-6 py-10 text-center text-white">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-red-500/15 ring-1 ring-white/20">
-                <svg viewBox="0 0 24 24" className="h-10 w-10 text-red-300" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="M9 9l6 6M15 9l-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-              <p className="mt-5 text-xs font-semibold uppercase tracking-[0.28em] text-gold">
-                Registration status
-              </p>
-              <h1 className="mt-3 text-3xl font-bold sm:text-4xl">Payment cancelled</h1>
-              <p className="mt-3 text-base text-slate-200">
-                Your {getConferenceName()} registration was not completed.
-              </p>
-            </div>
-
-            <div className="space-y-6 p-6 sm:p-8">
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-900">
-                <p className="text-sm font-semibold">No charges were made to your account.</p>
-                <p className="mt-2 text-sm leading-6 text-amber-800">
-                  The payment process was cancelled before completion, so your registration is still pending.
-                  You can try again at any time using the same form or choose the discounted registration option.
-                </p>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                  <h2 className="text-lg font-semibold text-navy">What happened?</h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Your payment was interrupted or cancelled while checking out. No booking was finalized.
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                  <h2 className="text-lg font-semibold text-navy">Next step</h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Retry the registration flow, review your selected ticket, and complete the payment when ready.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap justify-center gap-3 pt-2">
-                <Button asChild size="lg">
-                  <Link to="/registration">Try registration again</Link>
-                </Button>
-                <Button asChild variant="outline" size="lg">
-                  <Link to="/discount-registration">Discount registration</Link>
-                </Button>
-                <Button asChild variant="outline" size="lg">
-                  <Link to="/contact">Contact support</Link>
-                </Button>
-                <Button asChild variant="ghost" size="lg">
-                  <Link to="/">Back to home</Link>
-                </Button>
-              </div>
-            </div>
+      <div className="py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="w-20 h-20 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-6">
+            <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#ef4444" strokeWidth={2}>
+              <circle cx="12" cy="12" r="10" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 9l-6 6m0-6l6 6" />
+            </svg>
           </div>
-        </section>
-      </main>
+          <h1 className="text-4xl font-bold mb-3">Payment Cancelled</h1>
+          <p className="text-xl text-muted-foreground mb-8">
+            Your registration payment for {confName} was cancelled.
+          </p>
 
+          <div className="bg-card border rounded-2xl p-6 mb-8 text-left">
+            <h3 className="font-semibold text-lg mb-2">What Happened?</h3>
+            <p className="text-muted-foreground text-sm">
+              Your transaction was cancelled before completion. No charges were made to your card or account.
+            </p>
+          </div>
+
+          <div className="flex justify-center gap-4">
+            <Button asChild size="lg">
+              <Link to="/register">
+                Try Registration Again
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link to="/">Back to Home</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
       <Footer />
-    </div>
+    </main>
   );
 }
+
+export default PaymentCancelPage;

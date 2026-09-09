@@ -213,3 +213,22 @@ export const subscribe = async (subscribeData: {
     });
   }
 };
+
+export const apiClient = {
+  get: async <T = any>(path: string, options?: ApiOptions): Promise<{ data: T }> => {
+    const res = await apiRequest<T>(path, { ...options, method: 'GET' });
+    return { data: res };
+  },
+  post: async <T = any>(path: string, data?: any, options?: ApiOptions): Promise<{ data: T }> => {
+    const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
+    const res = await apiRequest<T>(path, {
+      ...options,
+      method: 'POST',
+      body: isFormData ? data : JSON.stringify(data),
+      isFormData,
+    });
+    return { data: res };
+  },
+};
+
+export default apiClient;

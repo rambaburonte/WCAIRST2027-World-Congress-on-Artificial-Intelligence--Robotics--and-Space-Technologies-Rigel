@@ -1420,7 +1420,7 @@ export function RegistrationPage() {
               Payment Provider
             </p>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              {["stripe",].map((provider) => (
+              {["stripe" /*, "paypal"*/].map((provider) => (
                 <button
                   key={provider}
                   type="button"
@@ -2062,7 +2062,7 @@ export function DiscountRegistrationPage() {
               Payment Provider
             </p>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              {["stripe"].map((provider) => (
+              {["stripe" /*, "paypal"*/].map((provider) => (
                 <button
                   key={provider}
                   type="button"
